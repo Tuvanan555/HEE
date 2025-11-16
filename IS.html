@@ -1,0 +1,1121 @@
+<!doctype html>
+<html lang="th">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>สัตว์เลี้ยงลูกด้วยนมในประเทศไทย</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+        body {
+            box-sizing: border-box;
+            font-family: 'Sarabun', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #f0f8f0 0%, #e8f5e8 100%);
+            min-height: 100%;
+            color: #2d5016;
+        }
+
+        html {
+            height: 100%;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(45, 80, 22, 0.1);
+            border: 2px solid #c8e6c9;
+        }
+
+        .site-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(46, 125, 50, 0.1);
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #4caf50;
+            margin-bottom: 30px;
+        }
+
+        .search-container {
+            position: relative;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px 50px 15px 20px;
+            font-size: 1.1rem;
+            border: 3px solid #81c784;
+            border-radius: 50px;
+            outline: none;
+            transition: all 0.3s ease;
+            background: #f9fff9;
+        }
+
+        .search-input:focus {
+            border-color: #4caf50;
+            box-shadow: 0 0 20px rgba(76, 175, 80, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #4caf50;
+            font-size: 1.2rem;
+        }
+
+        .filter-container {
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            background: white;
+            border: 2px solid #81c784;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            color: #2e7d32;
+            font-weight: 500;
+        }
+
+        .filter-btn:hover {
+            background: #e8f5e9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
+        }
+
+        .filter-btn.active {
+            background: #4caf50;
+            color: white;
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+        }
+
+        .results-info {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 1.1rem;
+            color: #2e7d32;
+            font-weight: 500;
+        }
+
+        .animals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .animal-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(45, 80, 22, 0.1);
+            border: 2px solid #e8f5e9;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            min-height: 400px;
+        }
+
+        .animal-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #4caf50, #81c784);
+        }
+
+        .animal-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(45, 80, 22, 0.15);
+            border-color: #4caf50;
+        }
+
+        .animal-thai {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 8px;
+        }
+
+        .animal-english {
+            font-size: 1.1rem;
+            color: #4caf50;
+            margin-bottom: 8px;
+            font-style: italic;
+        }
+
+        .animal-scientific {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+
+        .animal-order {
+            display: inline-block;
+            background: linear-gradient(135deg, #4caf50, #66bb6a);
+            color: white;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+            margin-bottom: 15px;
+        }
+
+        .animal-icon {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .animal-details {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e8f5e9;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #2e7d32;
+            min-width: 60px;
+        }
+
+        .detail-value {
+            color: #555;
+            text-align: right;
+            flex: 1;
+            margin-left: 10px;
+        }
+
+        .animal-description {
+            margin-top: 12px;
+            padding: 12px;
+            background: #f9fff9;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            line-height: 1.4;
+            color: #444;
+            border-left: 3px solid #4caf50;
+        }
+
+        .status-badge {
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .status-normal {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .status-rare {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .status-endangered {
+            background: #ffebee;
+            color: #d32f2f;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+            font-size: 1.2rem;
+        }
+
+        .no-results-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        @media (max-width: 768px) {
+            .site-title {
+                font-size: 2rem;
+            }
+            
+            .animals-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .filter-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .filter-btn {
+                width: 200px;
+            }
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #4caf50;
+            font-size: 1.1rem;
+        }
+    </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="container">
+   <header class="header">
+    <h1 class="site-title" id="siteTitle">สัตว์เลี้ยงลูกด้วยนมในประเทศไทย</h1>
+    <p class="subtitle">สำรวจความหลากหลายของสัตว์เลี้ยงลูกด้วยนมที่อาศัยอยู่ในประเทศไทย</p>
+    <div class="search-container"><input type="text" class="search-input" id="searchInput" placeholder="ค้นหาสัตว์..." autocomplete="off"> <span class="search-icon">🔍</span>
+    </div>
+   </header>
+   <div class="filter-container">
+    <h3>กรองตามอันดับสัตว์</h3>
+    <div class="filter-buttons" id="filterButtons"><button class="filter-btn active" data-order="all">ทั้งหมด</button>
+    </div>
+   </div>
+   <div class="results-info" id="resultsInfo"></div>
+   <div class="animals-grid" id="animalsGrid"></div>
+   <div class="no-results" id="noResults" style="display: none;">
+    <div class="no-results-icon">
+     🔍
+    </div>
+    <p>ไม่พบสัตว์ที่ตรงกับการค้นหา</p>
+    <p>ลองใช้คำค้นหาอื่น หรือเลือกดูทั้งหมด</p>
+   </div>
+  </div>
+  <script>
+        const defaultConfig = {
+            site_title: "สัตว์เลี้ยงลูกด้วยนมในประเทศไทย",
+            search_placeholder: "ค้นหาสัตว์..."
+        };
+
+        // ข้อมูลสัตว์ทั้งหมด
+        const animals = [
+            // อันดับลิ่น
+            { 
+                thai: "ลิ่นจีน", 
+                english: "Chinese pangolin", 
+                scientific: "Manis pentadactyla", 
+                order: "อันดับลิ่น",
+                icon: "🦔",
+                size: "กลาง (40-58 ซม.)",
+                habitat: "ป่าเขตร้อน ป่าไผ่",
+                food: "มด ปลวก",
+                status: "ใกล้สูญพันธุ์",
+                description: "มีเกล็ดแข็งปกคลุมตัว สามารถม้วนตัวเป็นลูกบอลได้ มีลิ้นยาวสำหรับจับแมลง"
+            },
+            { 
+                thai: "ลิ่นซุนดา", 
+                english: "Sunda pangolin", 
+                scientific: "Manis javanica", 
+                order: "อันดับลิ่น",
+                icon: "🦔",
+                size: "กลาง (40-65 ซม.)",
+                habitat: "ป่าดิบชื้น ป่าไผ่",
+                food: "มด ปลวก แมลงเล็ก",
+                status: "ใกล้สูญพันธุ์",
+                description: "มีเกล็ดสีน้ำตาลเข้ม กิจกรรมเวลากลางคืน ปีนต้นไม้เก่ง"
+            },
+            
+            // อันดับสัตว์กินแมลงแท้
+            { 
+                thai: "หนูเหม็น, สาโท", 
+                english: "Moonrat, Gymnure", 
+                scientific: "Echinosorex gymnurus", 
+                order: "อันดับสัตว์กินแมลงแท้",
+                icon: "🐭",
+                size: "ใหญ่ (26-44 ซม.)",
+                habitat: "ป่าดิบชื้น ใกล้แหล่งน้ำ",
+                food: "แมลง หนอน ปลาเล็ก กบ",
+                status: "ปกติ",
+                description: "มีกลิ่นเหม็นแรง ขนสีขาวดำ หางยาวไม่มีขน ว่ายน้ำเก่ง"
+            },
+            { 
+                thai: "หนูผีหางหมู", 
+                english: "Lesser moonrat", 
+                scientific: "Hylomys suilus", 
+                order: "อันดับสัตว์กินแมลงแท้",
+                icon: "🐭",
+                size: "เล็ก (10-15 ซม.)",
+                habitat: "ป่าเขตเมืองร้อน พื้นป่าชื้น",
+                food: "แมลงเล็ก หนอน",
+                status: "ปกติ",
+                description: "หางสั้นคล้ายหมู ขนสีน้ำตาลเข้ม กิจกรรมเวลากลางคืน"
+            },
+            { 
+                thai: "ตุ่นโคลส, ติ่ง", 
+                english: "Kloss's mole", 
+                scientific: "Euroscaptor klossi", 
+                order: "อันดับสัตว์กินแมลงแท้",
+                icon: "🐹",
+                size: "เล็ก (8-12 ซม.)",
+                habitat: "ใต้ดิน ป่าภูเขา",
+                food: "หนอนดิน แมลงใต้ดิน",
+                status: "หายาก",
+                description: "อาศัยใต้ดิน ตาเล็กมาก เท้าหน้าใหญ่สำหรับขุดดิน"
+            },
+            { 
+                thai: "หนูผีหางยาวฟันแดง", 
+                english: "Red-toothed shrew", 
+                scientific: "Soriculus parca", 
+                order: "อันดับสัตว์กินแมลงแท้",
+                icon: "🐭",
+                size: "เล็ก (6-8 ซม.)",
+                habitat: "ป่าภูเขาสูง",
+                food: "แมลงเล็ก หนอน",
+                status: "หายาก",
+                description: "ฟันมีสีแดง หางยาว อาศัยในพื้นที่สูง"
+            },
+            { 
+                thai: "หนูผีป่าหางจู๋", 
+                english: "Mole shrew", 
+                scientific: "Anourosorex squamipes", 
+                order: "อันดับสัตว์กินแมลงแท้",
+                icon: "🐭",
+                size: "เล็ก (6-9 ซม.)",
+                habitat: "ป่าภูเขา พื้นป่าชื้น",
+                food: "แมลงเล็ก หนอนดิน",
+                status: "ปกติ",
+                description: "หางสั้นมาก เท้ามีเกล็ด ขุดดินเก่ง"
+            },
+            { 
+                thai: "หนูผีบ้าน", 
+                english: "House shrew", 
+                scientific: "Suncus murinus", 
+                order: "อันดับสัตว์กินแมลงแท้",
+                icon: "🐭",
+                size: "เล็ก (6-10 ซม.)",
+                habitat: "บ้าน สวน พื้นที่เกษตร",
+                food: "แมลง หนอน เศษอาหาร",
+                status: "ปกติ",
+                description: "อาศัยใกล้คน ขนสีเทา กิจกรรมทั้งกลางวันและกลางคืน"
+            },
+            { 
+                thai: "หนูผีจิ๋ว", 
+                english: "Dwarf shrew", 
+                scientific: "Suncus etruscus", 
+                order: "อันดับสัตว์กินแมลงแท้",
+                icon: "🐭",
+                size: "จิ๋ว (3-5 ซม.)",
+                habitat: "ป่า สวน พุ่มไผ่",
+                food: "แมลงเล็กมาก",
+                status: "ปกติ",
+                description: "สัตว์เลี้ยงลูกด้วยนมที่เล็กที่สุดในโลก หัวใจเต้นเร็วมาก"
+            },
+            { 
+                thai: "หนูผีมลายู, หนูผีป่า", 
+                english: "Malay shrew", 
+                scientific: "Suncus malayanus", 
+                order: "อันดับสัตว์กินแมลงแท้",
+                icon: "🐭",
+                size: "เล็ก (5-8 ซม.)",
+                habitat: "ป่าดิบชื้น พื้นป่า",
+                food: "แมลงเล็ก หนอน",
+                status: "ปกติ",
+                description: "ขนสีน้ำตาล อาศัยในป่า กิจกรรมเวลากลางคืน"
+            },
+            { 
+                thai: "หนูผีนา", 
+                english: "Southeast Asian white-toothed shrew", 
+                scientific: "Crocidura fuliginosa", 
+                order: "อันดับสัตว์กินแมลงแท้",
+                icon: "🐭",
+                size: "เล็ก (6-9 ซม.)",
+                habitat: "นาข้าว พื้นที่เกษตร",
+                food: "แมลง หนอน ใยแมงมุม",
+                status: "ปกติ",
+                description: "ฟันสีขาว อาศัยในนาข้าว ช่วยกำจัดแมลงศัตรูพืช"
+            },
+            { 
+                thai: "หนูผีเทาหางสั้น", 
+                english: "Grey shrew", 
+                scientific: "Crocidura attenuata", 
+                order: "อันดับสัตว์กินแมลงแท้",
+                icon: "🐭",
+                size: "เล็ก (5-7 ซม.)",
+                habitat: "ป่า พุ่มไผ่",
+                food: "แมลงเล็ก หนอน",
+                status: "ปกติ",
+                description: "ขนสีเทา หางสั้น กิจกรรมเวลากลางคืน"
+            },
+            { 
+                thai: "หนูผีอ่างกา", 
+                english: "Common white-toothed shrew", 
+                scientific: "Crocidura gueldenstaedii", 
+                order: "อันดับสัตว์กินแมลงแท้",
+                icon: "🐭",
+                size: "เล็ก (6-8 ซม.)",
+                habitat: "ป่า สวน พื้นที่เปิด",
+                food: "แมลง หนอน เมล็ดพืช",
+                status: "ปกติ",
+                description: "ฟันสีขาว พบได้ทั่วไป ปรับตัวได้ดี"
+            },
+            { 
+                thai: "หนูผีป่าเล็กขนเกรียน", 
+                english: "Horsfield's shrew", 
+                scientific: "Crocidura horsfieldii", 
+                order: "อันดับสัตว์กินแมลงแท้",
+                icon: "🐭",
+                size: "เล็ก (5-7 ซม.)",
+                habitat: "ป่าเบญจพรรณ พื้นป่าแห้ง",
+                food: "แมลงเล็ก หนอน",
+                status: "ปกติ",
+                description: "ขนหยาบ สีน้ำตาลเข้ม อาศัยในป่าแห้ง"
+            },
+            { 
+                thai: "หนูผีภูเขา", 
+                english: "Mountain shrew", 
+                scientific: "Crocidura monticola", 
+                order: "อันดับสัตว์กินแมลงแท้",
+                icon: "🐭",
+                size: "เล็ก (6-8 ซม.)",
+                habitat: "ป่าภูเขาสูง",
+                food: "แมลงเล็ก หนอน",
+                status: "หายาก",
+                description: "อาศัยในพื้นที่สูง ขนหนาป้องกันความเย็น"
+            },
+            
+            // อันดับกระแต
+            { 
+                thai: "กระแตใต้", 
+                english: "Common treeshrew", 
+                scientific: "Tupaia glis", 
+                order: "อันดับกระแต",
+                icon: "🐿️",
+                size: "กลาง (16-21 ซม.)",
+                habitat: "ป่าดิบชื้น ป่าเบญจพรรณ",
+                food: "ผลไม้ แมลง ไข่นก",
+                status: "ปกติ",
+                description: "คล้ายกระรอก หางยาวฟู ปีนต้นไม้เก่ง กิจกรรมเวลากลางวัน"
+            },
+            { 
+                thai: "กระแตเหนือ", 
+                english: "Northern treeshrew", 
+                scientific: "Tupaia belangeri", 
+                order: "อันดับกระแต",
+                icon: "🐿️",
+                size: "กลาง (15-20 ซม.)",
+                habitat: "ป่าเขตเมืองร้อน ป่าภูเขา",
+                food: "ผลไม้ แมลง หนอน",
+                status: "ปกติ",
+                description: "ขนสีน้ำตาลแดง หูใหญ่ ตาโต กิจกรรมเวลากลางวัน"
+            },
+            { 
+                thai: "กระแตเล็ก", 
+                english: "Lesser treeshew", 
+                scientific: "Tupaia minor", 
+                order: "อันดับกระแต",
+                icon: "🐿️",
+                size: "เล็ก (12-16 ซม.)",
+                habitat: "ป่าดิบชื้น ป่าไผ่",
+                food: "ผลไม้เล็ก แมลง",
+                status: "ปกติ",
+                description: "ตัวเล็กที่สุดในตระกูล ขนสีน้ำตาลอ่อน ว่องไว"
+            },
+            { 
+                thai: "กระแตหางหนู", 
+                english: "Northern smooth-tailed treeshrew", 
+                scientific: "Dendrogale murina", 
+                order: "อันดับกระแต",
+                icon: "🐿️",
+                size: "เล็ก (10-14 ซม.)",
+                habitat: "ป่าภูเขาสูง",
+                food: "แมลง ผลไม้เล็ก",
+                status: "หายาก",
+                description: "หางเรียบไม่มีขน ตัวเล็ก อาศัยในพื้นที่สูง"
+            },
+            { 
+                thai: "กระแตหางขนนก", 
+                english: "Pen-tailed treeshrew", 
+                scientific: "Ptilocercus lowii", 
+                order: "อันดับกระแต",
+                icon: "🐿️",
+                size: "เล็ก (13-18 ซม.)",
+                habitat: "ป่าดิบชื้น ป่าปาล์ม",
+                food: "น้ำหวานดอกไม้ แมลง",
+                status: "หายาก",
+                description: "หางปลายมีขนคล้ายขนนก กิจกรรมเวลากลางคืน ดื่มน้ำหวานดอกไม้"
+            },
+            
+            // อันดับบ่าง
+            { 
+                thai: "บ่าง, พุงจง, พะจง", 
+                english: "Malayan flying lemur", 
+                scientific: "Galeopterus variegatus", 
+                order: "อันดับบ่าง",
+                icon: "🦇",
+                size: "ใหญ่ (33-42 ซม.)",
+                habitat: "ป่าดิบชื้น ป่าปาล์ม",
+                food: "ใบไม้อ่อน ดอกไม้ ผลไม้",
+                status: "ใกล้สูญพันธุ์",
+                description: "มีเยื่อบินระหว่างขา บินร่อนได้ไกล กิจกรรมเวลากลางคืน กินใบไม้"
+            },
+            
+            // อันดับค้างคาว
+            { 
+                thai: "ค้างคาวแม่ไก่เกาะ", 
+                english: "Small flying fox", 
+                scientific: "Pteropus hypomelanus", 
+                order: "อันดับค้างคาว",
+                icon: "🦇",
+                size: "ใหญ่ (14-17 ซม.)",
+                habitat: "เกาะ ป่าชายเลน ป่าปาล์ม",
+                food: "ผลไม้ น้ำหวานดอกไม้",
+                status: "ปกติ",
+                description: "ค้างคาวผลไม้ขนาดกลาง หน้าคล้ายสุนัขจิ้งจอก บินกลางวัน"
+            },
+            { 
+                thai: "ค้างคาวแม่ไก่นครสวรรค์", 
+                english: "Intermedins flying fox", 
+                scientific: "Pteropus intermedius", 
+                order: "อันดับค้างคาว",
+                icon: "🦇",
+                size: "ใหญ่ (15-18 ซม.)",
+                habitat: "ป่าดิบชื้น ป่าเบญจพรรณ",
+                food: "ผลไม้ น้ำหวานดอกไม้",
+                status: "หายาก",
+                description: "ค้างคาวผลไม้ขนาดกลาง พบในภาคกลางของไทย"
+            },
+            { 
+                thai: "ค้างคาวแม่ไก่ป่าฝน", 
+                english: "Large flying fox", 
+                scientific: "Pteropus vampyrus", 
+                order: "อันดับค้างคาว",
+                icon: "🦇",
+                size: "ใหญ่มาก (20-25 ซม.)",
+                habitat: "ป่าดิบชื้น ป่าชายเลน",
+                food: "ผลไม้ใหญ่ น้ำหวานดอกไม้",
+                status: "ใกล้สูญพันธุ์",
+                description: "ค้างคาวที่ใหญ่ที่สุด ปีกกางได้กว้าง 1.5 เมตร บินกลางวัน"
+            },
+            { 
+                thai: "ค้างคาวแม่ไก่ภาคกลาง", 
+                english: "Lyle's flying fox", 
+                scientific: "Pteropus lylei", 
+                order: "อันดับค้างคาว",
+                icon: "🦇",
+                size: "ใหญ่ (16-19 ซม.)",
+                habitat: "ป่าเบญจพรรณ สวนผลไม้",
+                food: "ผลไม้ น้ำหวานดอกไม้",
+                status: "หายาก",
+                description: "พบในภาคกลางและตะวันออก ชอบผลไม้หวาน"
+            },
+            { 
+                thai: "ค้างคาวบังฟันรี", 
+                english: "Leschenaulti", 
+                scientific: "Rousettus leschenaulti", 
+                order: "อันดับค้างคาว",
+                icon: "🦇",
+                size: "กลาง (12-15 ซม.)",
+                habitat: "ถ้ำ อาคารเก่า ป่า",
+                food: "ผลไม้ น้ำหวานดอกไม้",
+                status: "ปกติ",
+                description: "อาศัยในถ้ำเป็นฝูงใหญ่ ใช้เสียงสะท้อนหาทาง"
+            },
+            { 
+                thai: "ค้างคาวบังฟันกลม", 
+                english: "Geoffroy's rousette", 
+                scientific: "Rousettus amplexicaudata", 
+                order: "อันดับค้างคาว",
+                icon: "🦇",
+                size: "กลาง (11-14 ซม.)",
+                habitat: "ถ้ำ ป่า สวนผลไม้",
+                food: "ผลไม้ น้ำหวานดอกไม้",
+                status: "ปกติ",
+                description: "หูกลม ฟันแหลม อาศัยในถ้ำ บินออกหาอาหารเวลาค่ำ"
+            },
+            { 
+                thai: "ค้างคาวขอบหูขาวเล็ก", 
+                english: "Lesser short-nosed fruit bat", 
+                scientific: "Cynopterus brachyotis", 
+                order: "อันดับค้างคาว",
+                icon: "🦇",
+                size: "เล็ก (6-8 ซม.)",
+                habitat: "สวน ป่า พื้นที่เกษตร",
+                food: "ผลไม้เล็ก น้ำหวานดอกไม้",
+                status: "ปกติ",
+                description: "หูมีขอบขาว จมูกสั้น ทำรังจากใบไผ่"
+            },
+            { 
+                thai: "ค้างคาวขอบหูขาวกลาง", 
+                english: "Short short-nosed fruit bat", 
+                scientific: "Cynopterus sphinx", 
+                order: "อันดับค้างคาว",
+                icon: "🦇",
+                size: "กลาง (8-10 ซม.)",
+                habitat: "สวน ป่า เมือง",
+                food: "ผลไม้ น้ำหวานดอกไม้",
+                status: "ปกติ",
+                description: "หูมีขอบขาว จมูกสั้น พบได้ทั่วไป ปรับตัวได้ดี"
+            },
+            { 
+                thai: "ค้างคาวขอบหูขาวใหญ่", 
+                english: "Horsfield's fruit bat", 
+                scientific: "Cynopterus horsfieldi", 
+                order: "อันดับค้างคาว",
+                icon: "🦇",
+                size: "ใหญ่ (10-12 ซม.)",
+                habitat: "ป่าดิบชื้น สวนผลไม้",
+                food: "ผลไม้ใหญ่ น้ำหวานดอกไม้",
+                status: "ปกติ",
+                description: "ขนาดใหญ่ในตระกูล หูมีขอบขาว ชอบผลไม้หวาน"
+            },
+            { 
+                thai: "ค้างคาวขอบหูดำใต้", 
+                english: "Southern tail-less fruit bat", 
+                scientific: "Megaerops ecaudatus", 
+                order: "อันดับค้างคาว",
+                icon: "🦇",
+                size: "เล็ก (5-7 ซม.)",
+                habitat: "ป่าดิบชื้น ภาคใต้",
+                food: "ผลไม้เล็ก น้ำหวานดอกไม้",
+                status: "ปกติ",
+                description: "ไม่มีหาง หูมีขอบดำ พบในภาคใต้"
+            },
+            { 
+                thai: "ค้างคาวขอบหูดำเหนือ", 
+                english: "Northern tail-less fruit bat", 
+                scientific: "Megaerops niphanae", 
+                order: "อันดับค้างคาว",
+                icon: "🦇",
+                size: "เล็ก (5-7 ซม.)",
+                habitat: "ป่าภูเขา ภาคเหนือ",
+                food: "ผลไม้เล็ก น้ำหวานดอกไม้",
+                status: "หายาก",
+                description: "ไม่มีหาง หูมีขอบดำ พบในภาคเหนือ"
+            },
+            { 
+                thai: "ค้างคาวดายัค", 
+                english: "Dyak fruit bat", 
+                scientific: "Dyacopterus spadiceus", 
+                order: "อันดับค้างคาว",
+                icon: "🦇",
+                size: "ใหญ่ (12-15 ซม.)",
+                habitat: "ป่าดิบชื้น ป่าภูเขา",
+                food: "ผลไม้ น้ำหวานดอกไม้",
+                status: "หายาก",
+                description: "ขนาดใหญ่ ขนสีน้ำตาลเข้ม อาศัยในป่าทึบ"
+            },
+            { 
+                thai: "ค้างคาวหัวดำ", 
+                english: "Black-headed fruit bat", 
+                scientific: "Chironax melanocephalus", 
+                order: "อันดับค้างคาว",
+                icon: "🦇",
+                size: "กลาง (8-10 ซม.)",
+                habitat: "ป่าดิบชื้น ป่าปาล์ม",
+                food: "ผลไม้ น้ำหวานดอกไม้",
+                status: "หายาก",
+                description: "หัวสีดำ ตัวสีน้ำตาล อาศัยในป่าทึบ"
+            },
+            { 
+                thai: "ค้างคาวดอย, ค้างคาวผลไม้ภูเขา", 
+                english: "Blandford's fruit bat", 
+                scientific: "Sphaerias blanfordi", 
+                order: "อันดับค้างคาว",
+                icon: "🦇",
+                size: "เล็ก (6-8 ซม.)",
+                habitat: "ป่าภูเขาสูง",
+                food: "ผลไม้ป่า น้ำหวานดอกไม้",
+                status: "หายาก",
+                description: "อาศัยในพื้นที่สูง ขนหนาป้องกันความเย็น"
+            },
+            { 
+                thai: "ค้างคาวปีกจุด", 
+                english: "Spotted-winged fruit bat", 
+                scientific: "Balionycteris maculata", 
+                order: "อันดับค้างคาว",
+                icon: "🦇",
+                size: "เล็ก (5-7 ซม.)",
+                habitat: "ป่าดิบชื้น ป่าปาล์ม",
+                food: "ผลไม้เล็ก น้ำหวานดอกไม้",
+                status: "หายาก",
+                description: "ปีกมีจุดสีขาว ตัวเล็ก อาศัยในป่าทึบ"
+            },
+            { 
+                thai: "ค้างคาวเล็บกุด", 
+                english: "Dawn bat, Cave bat fruit bat", 
+                scientific: "Eonycteris spelaea", 
+                order: "อันดับค้างคาว",
+                icon: "🦇",
+                size: "กลาง (9-12 ซม.)",
+                habitat: "ถ้ำ ป่า สวน",
+                food: "น้ำหวานดอกไม้ เกสรดอกไม้",
+                status: "ปกติ",
+                description: "เล็บสั้น ลิ้นยาว ดูดน้ำหวานดอกไม้ อาศัยในถ้ำ"
+            },
+            { 
+                thai: "ค้างคาวหน้ายาวเล็ก", 
+                english: "Common long-tongued fruit bat", 
+                scientific: "Macroglossus minimus", 
+                order: "อันดับค้างคาว",
+                icon: "🦇",
+                size: "เล็ก (6-8 ซม.)",
+                habitat: "ป่า สวน เมือง",
+                food: "น้ำหวานดอกไม้ เกสรดอกไม้",
+                status: "ปกติ",
+                description: "จมูกยาว ลิ้นยาวมาก ดูดน้ำหวานดอกไม้ บินได้เก่ง"
+            },
+            { 
+                thai: "ค้างคาวหน้ายาวใหญ่", 
+                english: "Hill long-tongued fruit bat", 
+                scientific: "Macroglossus sobrinus", 
+                order: "อันดับค้างคาว",
+                icon: "🦇",
+                size: "กลาง (7-9 ซม.)",
+                habitat: "ป่าภูเขา สวนผลไม้",
+                food: "น้ำหวานดอกไม้ เกสรดอกไม้",
+                status: "ปกติ",
+                description: "จมูกยาว ลิ้นยาว อาศัยในพื้นที่สูง"
+            },
+            { 
+                thai: "ค้างคาวหางโผล่", 
+                english: "Lesser sheath-tailed bat", 
+                scientific: "Emballonura monticola", 
+                order: "อันดับค้างคาว",
+                icon: "🦇",
+                size: "เล็ก (4-6 ซม.)",
+                habitat: "ถ้ำ โพรงไผ่ ป่าภูเขา",
+                food: "แมลงบิน ยุง มอด",
+                status: "หายาก",
+                description: "หางโผล่จากเยื่อบิน ตัวเล็ก บินเร็ว"
+            },
+            { 
+                thai: "ค้างคาวปีกถุงเคราดำ", 
+                english: "Black-tomb bat", 
+                scientific: "Taphozous melanopogon", 
+                order: "อันดับค้างคาว",
+                icon: "🦇",
+                size: "กลาง (8-11 ซม.)",
+                habitat: "ถ้ำ อาคารเก่า ป่า",
+                food: "แมลงบิน ด้วง มอด",
+                status: "ปกติ",
+                description: "เคราสีดำ ปีกยาว บินเร็ว อาศัยในถ้ำ"
+            },
+            { 
+                thai: "ค้างคาวปีกถุงต่อมคาง", 
+                english: "Long-winged tomb bat", 
+                scientific: "Taphozous longimanus", 
+                order: "อันดับค้างคาว",
+                icon: "🦇",
+                size: "กลาง (9-12 ซม.)",
+                habitat: "ถ้ำ อาคาร ป่า",
+                food: "แมลงบิน ด้วง",
+                status: "ปกติ",
+                description: "ปีกยาวมาก บินเร็ว มีต่อมคาง อาศัยในถ้ำ"
+            },
+            { 
+                thai: "ค้างคาวปีกถุงใหญ่", 
+                english: "Theobald's bat", 
+                scientific: "Taphozous theobaldi", 
+                order: "อันดับค้างคาว",
+                icon: "🦇",
+                size: "ใหญ่ (10-13 ซม.)",
+                habitat: "ถ้ำ อาคารเก่า",
+                food: "แมลงบิน ด้วงใหญ่",
+                status: "หายาก",
+                description: "ขนาดใหญ่ในตระกูล ปีกยาว บินแรง"
+            },
+            { 
+                thai: "ค้างคาวคุณกิตติ", 
+                english: "Hog-nosed bat, Bamblebee bat", 
+                scientific: "Craseonycteris thonglongyai", 
+                order: "อันดับค้างคาว",
+                icon: "🦇",
+                size: "จิ๋ว (3-4 ซม.)",
+                habitat: "ถ้ำหินปูน ป่าไผ่",
+                food: "แมลงเล็กมาก ยุง",
+                status: "ใกล้สูญพันธุ์",
+                description: "ค้างคาวที่เล็กที่สุดในโลก จมูกคล้ายหมู พบเฉพาะในไทย"
+            },
+            { 
+                thai: "ค้างคาวหน้าร่อง", 
+                english: "-", 
+                scientific: "Nycteris tragata", 
+                order: "อันดับค้างคาว",
+                icon: "🦇",
+                size: "กลาง (7-9 ซม.)",
+                habitat: "ถ้ำ ป่าดิบชื้น",
+                food: "แมลงบิน ยุง มอด",
+                status: "หายาก",
+                description: "หน้ามีร่องลึก หูใหญ่ ใช้เสียงสะท้อนหาทาง"
+            },
+            { 
+                thai: "ค้างคาวแวมไพร์แปลงเล็ก", 
+                english: "Lesser false vampire bat", 
+                scientific: "Megaderma spasma", 
+                order: "อันดับค้างคาว",
+                icon: "🦇",
+                size: "กลาง (6-9 ซม.)",
+                habitat: "ถ้ำ อาคารเก่า ป่า",
+                food: "แมลงใหญ่ กบเล็ก ปลาเล็ก",
+                status: "ปกติ",
+                description: "หูใหญ่มาก ไม่ดูดเลือด กินแมลงและสัตว์เล็ก"
+            },
+            { 
+                thai: "ค้างคาวแวมไพร์แปลงใหญ่", 
+                english: "Greater false vampire bat", 
+                scientific: "Megaderma lyra", 
+                order: "อันดับค้างคาว",
+                icon: "🦇",
+                size: "ใหญ่ (8-12 ซม.)",
+                habitat: "ถ้ำ อาคารเก่า ป่า",
+                food: "แมลงใหญ่ กบ ปลา นกเล็ก",
+                status: "หายาก",
+                description: "ขนาดใหญ่ หูใหญ่มาก ไม่ดูดเลือด กินสัตว์เล็ก"
+            },
+            { 
+                thai: "ค้างคาวมงกุฎสามใบพัด", 
+                english: "Trefoil horseshoe bat", 
+                scientific: "Rhinolophus trifoliatus", 
+                order: "อันดับค้างคาว",
+                icon: "🦇",
+                size: "เล็ก (4-6 ซม.)",
+                habitat: "ถ้ำ ป่าดิบชื้น",
+                food: "แมลงบิน ยุง มอด",
+                status: "หายาก",
+                description: "จมูกมีรูปสามใบพัด ใช้เสียงสะท้อนหาทาง อาศัยในถ้ำ"
+            }
+        ];
+
+        let filteredAnimals = [...animals];
+        let currentFilter = 'all';
+
+        // สร้างปุ่มกรอง
+        function createFilterButtons() {
+            const orders = [...new Set(animals.map(animal => animal.order))];
+            const filterButtons = document.getElementById('filterButtons');
+            
+            orders.forEach(order => {
+                const button = document.createElement('button');
+                button.className = 'filter-btn';
+                button.textContent = order;
+                button.dataset.order = order;
+                button.addEventListener('click', () => filterByOrder(order));
+                filterButtons.appendChild(button);
+            });
+        }
+
+        // กรองตามอันดับ
+        function filterByOrder(order) {
+            currentFilter = order;
+            
+            // อัปเดตปุ่ม active
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.order === order) {
+                    btn.classList.add('active');
+                }
+            });
+
+            applyFilters();
+        }
+
+        // ค้นหาสัตว์
+        function searchAnimals(query) {
+            if (!query.trim()) {
+                return currentFilter === 'all' ? animals : animals.filter(animal => animal.order === currentFilter);
+            }
+
+            const searchTerm = query.toLowerCase().trim();
+            let results = animals.filter(animal => {
+                return animal.thai.toLowerCase().includes(searchTerm) ||
+                       animal.english.toLowerCase().includes(searchTerm) ||
+                       animal.scientific.toLowerCase().includes(searchTerm) ||
+                       animal.order.toLowerCase().includes(searchTerm) ||
+                       animal.habitat.toLowerCase().includes(searchTerm) ||
+                       animal.food.toLowerCase().includes(searchTerm) ||
+                       animal.status.toLowerCase().includes(searchTerm) ||
+                       animal.description.toLowerCase().includes(searchTerm);
+            });
+
+            if (currentFilter !== 'all') {
+                results = results.filter(animal => animal.order === currentFilter);
+            }
+
+            return results;
+        }
+
+        // ใช้ตัวกรองทั้งหมด
+        function applyFilters() {
+            const searchQuery = document.getElementById('searchInput').value;
+            filteredAnimals = searchAnimals(searchQuery);
+            displayAnimals(filteredAnimals);
+            updateResultsInfo();
+        }
+
+        // แสดงสัตว์
+        function displayAnimals(animalList) {
+            const grid = document.getElementById('animalsGrid');
+            const noResults = document.getElementById('noResults');
+
+            if (animalList.length === 0) {
+                grid.style.display = 'none';
+                noResults.style.display = 'block';
+                return;
+            }
+
+            grid.style.display = 'grid';
+            noResults.style.display = 'none';
+
+            grid.innerHTML = animalList.map(animal => {
+                const statusClass = animal.status === 'ปกติ' ? 'status-normal' : 
+                                  animal.status === 'หายาก' ? 'status-rare' : 'status-endangered';
+                
+                return `
+                <div class="animal-card">
+                    <div class="animal-icon">${animal.icon}</div>
+                    <div class="animal-thai">${animal.thai}</div>
+                    <div class="animal-english">${animal.english}</div>
+                    <div class="animal-scientific">${animal.scientific}</div>
+                    <div class="animal-order">${animal.order}</div>
+                    
+                    <div class="animal-details">
+                        <div class="detail-row">
+                            <span class="detail-label">ขนาด:</span>
+                            <span class="detail-value">${animal.size}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">ที่อยู่:</span>
+                            <span class="detail-value">${animal.habitat}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">อาหาร:</span>
+                            <span class="detail-value">${animal.food}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">สถานะ:</span>
+                            <span class="detail-value">
+                                <span class="status-badge ${statusClass}">${animal.status}</span>
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="animal-description">
+                        ${animal.description}
+                    </div>
+                </div>
+            `;
+            }).join('');
+        }
+
+        // อัปเดตข้อมูลผลลัพธ์
+        function updateResultsInfo() {
+            const info = document.getElementById('resultsInfo');
+            const total = filteredAnimals.length;
+            const orderText = currentFilter === 'all' ? 'ทั้งหมด' : currentFilter;
+            
+            
+        }
+
+        // เริ่มต้นแอป
+        function initializeApp() {
+            createFilterButtons();
+            displayAnimals(animals);
+            updateResultsInfo();
+
+            // ตั้งค่า event listener สำหรับการค้นหา
+            const searchInput = document.getElementById('searchInput');
+            searchInput.addEventListener('input', (e) => {
+                applyFilters();
+            });
+
+            // ตั้งค่า event listener สำหรับปุ่ม "ทั้งหมด"
+            document.querySelector('[data-order="all"]').addEventListener('click', () => {
+                filterByOrder('all');
+            });
+        }
+
+        // Element SDK Configuration
+        async function onConfigChange(config) {
+            const siteTitle = document.getElementById('siteTitle');
+            const searchInput = document.getElementById('searchInput');
+            
+            if (siteTitle) {
+                siteTitle.textContent = config.site_title || defaultConfig.site_title;
+            }
+            
+            if (searchInput) {
+                searchInput.placeholder = config.search_placeholder || defaultConfig.search_placeholder;
+            }
+        }
+
+        function mapToCapabilities(config) {
+            return {
+                recolorables: [],
+                borderables: [],
+                fontEditable: undefined,
+                fontSizeable: undefined
+            };
+        }
+
+        function mapToEditPanelValues(config) {
+            return new Map([
+                ["site_title", config.site_title || defaultConfig.site_title],
+                ["search_placeholder", config.search_placeholder || defaultConfig.search_placeholder]
+            ]);
+        }
+
+        // เริ่มต้นแอปพลิเคชัน
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeApp();
+            
+            // Initialize Element SDK
+            if (window.elementSdk) {
+                window.elementSdk.init({
+                    defaultConfig,
+                    onConfigChange,
+                    mapToCapabilities,
+                    mapToEditPanelValues
+                });
+            }
+        });
+    </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99f45799a539f305',t:'MTc2MzI2ODM2MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
