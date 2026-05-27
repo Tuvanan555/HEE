@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="DepreSim AI — ผู้ช่วยด้านสุขภาพจิตประจำเกม Depression Simulation ให้ความรู้เรื่องโรคซึมเศร้าสำหรับเยาวชนไทย">
+  <meta name="theme-color" content="#1a1a2e">
+  <title>DepreSim AI — ผู้ช่วยด้านสุขภาพจิต</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+</head>
+
+<body>
+
+  <!-- Background decorative orbs and particles -->
+  <div id="particles-container" class="particles-container"></div>
+  <div class="bg-orb bg-orb--1" aria-hidden="true"></div>
+  <div class="bg-orb bg-orb--2" aria-hidden="true"></div>
+  <div class="bg-orb bg-orb--3" aria-hidden="true"></div>
+
+  <!-- App Container -->
+  <div class="app">
+
+    <!-- Header -->
+    <header class="header" id="app-header">
+      <div class="header__logo" aria-hidden="true">🧠</div>
+      <div class="header__info">
+        <h1 class="header__title">DepreSim AI</h1>
+        <p class="header__subtitle">ผู้ช่วยด้านสุขภาพจิตประจำเกม Depression Simulation</p>
+      </div>
+      <div class="header__status">
+        <span class="header__status-dot"></span>
+        ออนไลน์
+      </div>
+    </header>
+
+    <!-- Tab Navigation -->
+    <nav class="tab-nav" aria-label="แท็บเมนูหลัก">
+      <button class="tab-btn active" data-tab="chat">💬 คุยกับบอท</button>
+      <button class="tab-btn" data-tab="tools">🛠️ เครื่องมือดูแลใจ</button>
+      <button class="tab-btn" data-tab="assessment">📝 แบบประเมิน</button>
+      <button class="tab-btn" data-tab="lessons">📚 แหล่งเรียนรู้</button>
+      <button class="tab-btn tab-btn--emergency" data-tab="emergency">🚨 สายด่วน</button>
+    </nav>
+
+    <!-- TAB 1: CHAT -->
+    <div id="tab-chat" class="tab-content active-tab">
+      
+      <!-- Daily Affirmation Banner -->
+      <div class="daily-affirmation glass-panel" id="daily-affirmation">
+        <span class="affirmation-icon">✨</span>
+        <span id="affirmation-text">กำลังโหลดข้อความดีๆ...</span>
+      </div>
+
+      <!-- Emergency Banner -->
+      <div class="emergency-banner" id="emergency-banner" role="alert">
+        <span class="emergency-banner__icon">❤️</span>
+        <span>สายด่วนสุขภาพจิต <span class="emergency-banner__number">1323</span> (24 ชม.)</span>
+      </div>
+
+      <!-- Chat Messages -->
+      <main class="chat" id="chat-messages" role="log" aria-live="polite" aria-label="ข้อความสนทนา">
+        <!-- Welcome Card -->
+        <div class="welcome-card">
+          <span class="welcome-card__emoji" aria-hidden="true">💜</span>
+          <h2 class="welcome-card__title">ยินดีต้อนรับสู่ DepreSim AI</h2>
+          <p class="welcome-card__desc">
+            สวัสดีค่ะ! เราเป็นผู้ช่วยด้านสุขภาพจิตประจำเกม Depression Simulation
+            พร้อมตอบคำถามเกี่ยวกับโรคซึมเศร้าอย่างเป็นมิตร
+            <br><br>
+            ลองพิมพ์คำถาม หรือกดปุ่มลัดด้านล่างเพื่อเริ่มต้นได้เลยค่ะ 😊
+          </p>
+        </div>
+      </main>
+
+      <!-- Quick Actions -->
+      <nav class="quick-actions" id="quick-actions" aria-label="คำถามยอดนิยม">
+        <div class="quick-actions-scroll">
+          <button class="quick-actions__btn" data-question="โรคซึมเศร้าคืออะไร?" id="qa-what">❓ ซึมเศร้าคืออะไร</button>
+          <button class="quick-actions__btn" data-question="อาการของโรคซึมเศร้ามีอะไรบ้าง?" id="qa-symptoms">🔍 อาการมีอะไรบ้าง</button>
+          <button class="quick-actions__btn" data-question="สาเหตุของโรคซึมเศร้าเกิดจากอะไร?" id="qa-causes">🧬 สาเหตุเกิดจากอะไร</button>
+          <button class="quick-actions__btn" data-question="โรคซึมเศร้าต่างจากความเศร้าธรรมดายังไง?" id="qa-diff">💡 ต่างจากเศร้าธรรมดา?</button>
+          <button class="quick-actions__btn" data-question="ถ้าเพื่อนดูเศร้ามาก เราควรช่วยยังไง?" id="qa-help">🤝 วิธีช่วยเพื่อน</button>
+          <button class="quick-actions__btn" data-question="มีแบบประเมินโรคซึมเศร้าไหม?" id="qa-assess">📋 แบบประเมินเบื้องต้น</button>
+        </div>
+      </nav>
+
+      <!-- Input Area -->
+      <div class="input-area" id="input-area">
+        <textarea class="input-area__field" id="message-input" placeholder="พิมพ์คำถามเกี่ยวกับโรคซึมเศร้าได้เลยค่ะ..."
+          rows="1" aria-label="พิมพ์ข้อความ"></textarea>
+        <button class="input-area__mic" id="mic-btn" aria-label="พูดด้วยเสียง" title="พูดด้วยเสียง">
+          🎙️
+        </button>
+        <button class="input-area__send" id="send-btn" aria-label="ส่งข้อความ" title="ส่งข้อความ">
+          ➤
+        </button>
+      </div>
+    </div>
+
+    <!-- TAB 2: ASSESSMENT -->
+    <div id="tab-assessment" class="tab-content" style="display: none;">
+      
+      <!-- Assessment Menu -->
+      <div class="assessment-menu-container glass-panel" id="assessment-menu">
+        <h2 class="assessment-title">📝 เลือกแบบประเมิน</h2>
+        <p class="assessment-desc">โปรดเลือกแบบประเมินที่คุณต้องการทำ เพื่อสำรวจสุขภาพจิตของตนเอง</p>
+        <div class="assessment-cards">
+          <div class="assessment-card" id="btn-start-2q">
+            <h3>แบบประเมิน 2Q</h3>
+            <p>แบบคัดกรองโรคซึมเศร้าเบื้องต้น 2 คำถาม ใช้เวลาไม่ถึง 1 นาที</p>
+            <button class="btn-start-test">เริ่มทำ 2Q</button>
+          </div>
+          <div class="assessment-card" id="btn-start-9q">
+            <h3>แบบประเมิน 9Q</h3>
+            <p>แบบประเมินความรุนแรงของโรคซึมเศร้า 9 คำถาม เพื่อความแม่นยำยิ่งขึ้น</p>
+            <button class="btn-start-test">เริ่มทำ 9Q</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2Q Form -->
+      <div class="assessment-container glass-panel" id="assessment-2q-container" style="display: none;">
+        <button class="btn-back-menu" onclick="showAssessmentMenu()">🔙 กลับไปหน้าเมนู</button>
+        <h2 class="assessment-title">แบบประเมิน 2Q (คัดกรองเบื้องต้น)</h2>
+        <p class="assessment-desc">ในช่วง 2 สัปดาห์ที่ผ่านมา รวมทั้งวันนี้ ท่านมีอาการเหล่านี้หรือไม่?</p>
+        
+        <form id="assessment-form-2q">
+          <div class="question-list" id="question-list-2q">
+            <!-- JS will inject questions here -->
+          </div>
+          <button type="submit" class="btn-submit" id="btn-submit-2q">ประเมินผล 2Q</button>
+        </form>
+
+        <div id="assessment-result-2q" class="assessment-result glass-panel" style="display: none;">
+          <p class="result-text" id="result-text-2q"></p>
+          <div class="result-action" id="result-action-2q"></div>
+          <button type="button" class="btn-reset" onclick="resetAssessment('2q')">ทำใหม่</button>
+        </div>
+      </div>
+
+      <!-- 9Q Form (Existing) -->
+      <div class="assessment-container glass-panel" id="assessment-9q-container" style="display: none;">
+        <button class="btn-back-menu" onclick="showAssessmentMenu()">🔙 กลับไปหน้าเมนู</button>
+        <h2 class="assessment-title">แบบประเมินโรคซึมเศร้า 9 คำถาม (9Q)</h2>
+        <p class="assessment-desc">ในช่วง 2 สัปดาห์ที่ผ่านมา รวมทั้งวันนี้ ท่านมีอาการเหล่านี้บ่อยแค่ไหน?</p>
+        
+        <form id="assessment-form">
+          <div class="question-list" id="question-list">
+            <!-- JS will inject questions here -->
+          </div>
+          <button type="submit" class="btn-submit" id="btn-submit-assessment">ประเมินผล 9Q</button>
+          <button type="button" class="btn-reset" id="btn-reset-assessment" style="display: none;">ทำแบบประเมินใหม่</button>
+        </form>
+
+        <div id="assessment-result" class="assessment-result glass-panel" style="display: none;">
+          <h3 class="result-score">คะแนนของคุณ: <span id="score-value" class="highlight-number">0</span> คะแนน</h3>
+          <p class="result-text" id="result-text"></p>
+          <div class="result-action" id="result-action"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: LESSONS -->
+    <div id="tab-lessons" class="tab-content" style="display: none;">
+      <div class="lessons-container">
+        <h2 class="lessons-title">💡 แหล่งความรู้เบื้องต้น</h2>
+        <div class="cards-grid">
+          <div class="lesson-card glass-panel">
+            <h3 class="lesson-card__title">❓ ซึมเศร้าคืออะไร?</h3>
+            <p class="lesson-card__desc">ความผิดปกติทางอารมณ์ที่มีผลต่อความคิด ความรู้สึก และการใช้ชีวิตประจำวัน ไม่ใช่แค่การคิดมาก หรือความอ่อนแอ</p>
+          </div>
+          <div class="lesson-card glass-panel">
+            <h3 class="lesson-card__title">🧬 สาเหตุของโรค</h3>
+            <p class="lesson-card__desc"><strong>ชีวภาพ:</strong> พันธุกรรม, โครงสร้างสมอง, สารสื่อประสาท, ฮอร์โมน, การนอน<br><strong>จิตสังคม:</strong> ความคิดลบ, ประสบการณ์ฝังใจ, ปัญหาความสัมพันธ์</p>
+          </div>
+          <div class="lesson-card glass-panel">
+            <h3 class="lesson-card__title">💔 อาการหลัก 5 กลุ่ม</h3>
+            <p class="lesson-card__desc">1. หดหู่ เศร้าหมอง<br>2. โทษตัวเอง ขาดสมาธิ<br>3. เชื่องช้าหรือกระสับกระส่าย<br>4. อ่อนล้า เบื่ออาหาร นอนไม่หลับ<br>5. แยกตัวจากสังคม</p>
+          </div>
+          <div class="lesson-card glass-panel highlight-card">
+            <h3 class="lesson-card__title">🤝 วิธีช่วยเหลือเพื่อน</h3>
+            <p class="lesson-card__desc">1. รับฟังอย่างตั้งใจ ไม่ตัดสิน<br>2. หลีกเลี่ยงคำว่า "คิดมากไปเอง"<br>3. บอกเขาว่า "เราอยู่ตรงนี้นะ"<br>4. แนะนำให้พบผู้เชี่ยวชาญ (โทร 1323)</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: TOOLS HUB (Consolidated) -->
+    <div id="tab-tools" class="tab-content" style="display: none;">
+      
+      <!-- Tools Menu -->
+      <div class="tools-menu-container glass-panel" id="tools-menu">
+        <h2 class="assessment-title">🛠️ เครื่องมือดูแลใจ</h2>
+        <p class="assessment-desc">เลือกใช้เครื่องมือต่างๆ เพื่อผ่อนคลายและดูแลสุขภาพจิตของคุณ</p>
+        <div class="assessment-cards">
+          <div class="assessment-card" onclick="showTool('mood')">
+            <h3>🌈 บันทึกอารมณ์</h3>
+            <p>บันทึกและติดตามอารมณ์ของคุณในแต่ละวัน</p>
+          </div>
+          <div class="assessment-card" onclick="showTool('breathing')">
+            <h3>🫁 ฝึกหายใจ</h3>
+            <p>เทคนิค 4-7-8 ช่วยลดความเครียดและคลายกังวล</p>
+          </div>
+          <div class="assessment-card" onclick="showTool('sounds')">
+            <h3>🎵 เสียงผ่อนคลาย</h3>
+            <p>ฟังเสียงธรรมชาติเพื่อสมาธิหรือการนอนหลับ</p>
+          </div>
+          <div class="assessment-card" onclick="showTool('diary')">
+            <h3>📖 ไดอารี่</h3>
+            <p>พื้นที่ปลอดภัยสำหรับเขียนระบายความรู้สึก</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tool: Mood Tracker -->
+      <div id="tool-mood" class="tool-view" style="display: none;">
+        <button class="btn-back-menu" onclick="showToolsMenu()">🔙 กลับไปหน้าเครื่องมือ</button>
+        <div class="mood-container glass-panel">
+        <h2 class="mood-title">🌈 วันนี้คุณรู้สึกอย่างไร?</h2>
+        <div class="mood-selector">
+          <button class="mood-btn" data-mood="happy">🤩<br><span>มีความสุข</span></button>
+          <button class="mood-btn" data-mood="calm">😌<br><span>สงบ</span></button>
+          <button class="mood-btn" data-mood="neutral">😐<br><span>เฉยๆ</span></button>
+          <button class="mood-btn" data-mood="sad">😔<br><span>เศร้า</span></button>
+          <button class="mood-btn" data-mood="angry">😫<br><span>เครียด</span></button>
+        </div>
+        <!-- Mood Chart -->
+        <div class="mood-chart-wrapper">
+          <h3>📊 กราฟแนวโน้มอารมณ์</h3>
+          <div class="chart-container">
+            <canvas id="mood-chart"></canvas>
+          </div>
+        </div>
+
+        <div class="mood-history-wrapper">
+          <h3>ประวัติอารมณ์ของคุณ</h3>
+          <div class="mood-history" id="mood-history">
+            <!-- JS will inject history here -->
+          </div>
+          <button class="btn-reset-history" id="clear-mood-history">ล้างประวัติ</button>
+        </div>
+      </div>
+      
+      <!-- Tool: Breathing Exercise -->
+      <div id="tool-breathing" class="tool-view" style="display: none;">
+        <button class="btn-back-menu" onclick="showToolsMenu()">🔙 กลับไปหน้าเครื่องมือ</button>
+        <div class="breathing-container glass-panel">
+        <h2 class="breathing-title">🫁 ฝึกการหายใจ (4-7-8)</h2>
+        <p class="breathing-desc">เทคนิคการหายใจเพื่อลดความเครียดและผ่อนคลาย</p>
+        
+        <div class="breathing-circle-container">
+          <div class="breathing-circle" id="breathing-circle">
+            <span id="breathing-text">พร้อมไหม?</span>
+          </div>
+        </div>
+        
+        <div class="breathing-controls">
+          <button class="btn-start" id="start-breathing">เริ่มฝึกหายใจ</button>
+          <button class="btn-stop hidden" id="stop-breathing">หยุด</button>
+        </div>
+      </div>
+      
+      <!-- Tool: Relaxing Sounds -->
+      <div id="tool-sounds" class="tool-view" style="display: none;">
+        <button class="btn-back-menu" onclick="showToolsMenu()">🔙 กลับไปหน้าเครื่องมือ</button>
+        <div class="sounds-container glass-panel">
+        <h2 class="sounds-title">🎵 เสียงบรรยากาศผ่อนคลาย</h2>
+        <p class="sounds-desc">เลือกฟังเสียงเพื่อช่วยให้ใจสงบ หรือช่วยในการนอนหลับ</p>
+        
+        <div class="sounds-grid">
+          <div class="sound-card" data-sound="rain">
+            <div class="sound-icon">🌧️</div>
+            <div class="sound-name">เสียงฝนตก</div>
+            <button class="play-btn">▶ เล่น</button>
+            <audio loop preload="none">
+              <source src="https://assets.mixkit.co/active_storage/sfx/2515/2515-preview.mp3" type="audio/mpeg">
+            </audio>
+          </div>
+          
+          <div class="sound-card" data-sound="forest">
+            <div class="sound-icon">🌲</div>
+            <div class="sound-name">เสียงป่าธรรมชาติ</div>
+            <button class="play-btn">▶ เล่น</button>
+            <audio loop preload="none">
+              <source src="https://assets.mixkit.co/active_storage/sfx/2501/2501-preview.mp3" type="audio/mpeg">
+            </audio>
+          </div>
+          
+          <div class="sound-card" data-sound="ocean">
+            <div class="sound-icon">🌊</div>
+            <div class="sound-name">เสียงคลื่นทะเล</div>
+            <button class="play-btn">▶ เล่น</button>
+            <audio loop preload="none">
+              <source src="https://assets.mixkit.co/active_storage/sfx/123/123-preview.mp3" type="audio/mpeg">
+            </audio>
+          </div>
+        </div>
+        
+        <div class="master-volume">
+          <label for="volume-control">🔊 ระดับเสียง:</label>
+          <input type="range" id="volume-control" min="0" max="1" step="0.1" value="0.5">
+        </div>
+      </div>
+      
+      <!-- Tool: Diary -->
+      <div id="tool-diary" class="tool-view" style="display: none;">
+        <button class="btn-back-menu" onclick="showToolsMenu()">🔙 กลับไปหน้าเครื่องมือ</button>
+        <div class="diary-container glass-panel">
+        <h2 class="diary-title">📖 ไดอารี่ระบายความในใจ</h2>
+        <p class="diary-desc">พื้นที่ปลอดภัยสำหรับเขียนสิ่งที่คุณคิด ข้อมูลจะถูกเก็บไว้ในเครื่องของคุณเท่านั้น</p>
+        
+        <div class="diary-input-area">
+          <textarea id="diary-textarea" placeholder="วันนี้มีอะไรอยู่ในใจ เขียนระบายออกมาได้เลย..."></textarea>
+          <button id="save-diary-btn" class="btn-save">บันทึกข้อความ</button>
+        </div>
+        
+        <div class="diary-entries-wrapper">
+          <h3>บันทึกของคุณ</h3>
+          <div id="diary-entries" class="diary-entries">
+            <!-- JS will inject entries here -->
+          </div>
+        </div>
+      </div>
+    </div> <!-- End of Tab Tools -->
+
+    <!-- TAB 5: EMERGENCY -->
+    <div id="tab-emergency" class="tab-content" style="display: none;">
+      <div class="emergency-container glass-panel">
+        <h2 class="emergency-title">🚨 แหล่งช่วยเหลือเร่งด่วน</h2>
+        <p class="emergency-desc">หากคุณรู้สึกไม่ปลอดภัย หรือต้องการใครสักคนรับฟังทันที โปรดติดต่อช่องทางเหล่านี้</p>
+        
+        <div class="emergency-card crisis-hotline">
+          <div class="e-card-icon">☎️</div>
+          <div class="e-card-content">
+            <h3>สายด่วนสุขภาพจิต (กรมสุขภาพจิต)</h3>
+            <div class="e-card-number">1323</div>
+            <p>เปิดให้บริการ 24 ชั่วโมง ให้คำปรึกษาฟรี</p>
+            <a href="tel:1323" class="call-btn">โทรทันที</a>
+          </div>
+        </div>
+        
+        <div class="emergency-card">
+          <div class="e-card-icon">🏥</div>
+          <div class="e-card-content">
+            <h3>สมาคมสะมาริตันส์แห่งประเทศไทย</h3>
+            <div class="e-card-number">02-113-6789</div>
+            <p>บริการรับฟังด้วยความเข้าใจ ไม่ตัดสิน เวลา 12:00 - 22:00 น.</p>
+            <a href="tel:021136789" class="call-btn">โทรติดต่อ</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Disclaimer -->
+    <footer class="disclaimer" id="disclaimer">
+      ⚠️ DepreSim AI ให้ข้อมูลความรู้เท่านั้น ไม่ใช่การวินิจฉัยทางการแพทย์<br>
+      🎮 ส่วนหนึ่งของโครงงาน <strong>จำลองสถานการณ์โรคซึมเศร้า (Depression Simulation)</strong><br>
+      👨‍💻 ทีมพัฒนา: ด.ช. ธุวานันท์ ไชยวงศ์ชินเดช, ด.ช. ธนดล ทืนรส, ด.ญ. สุพรรณี จันทร์งาม<br>
+      🏫 โรงเรียนศรีเมืองวิทยาคาร จ.อุบลราชธานี
+    </footer>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+
+</html>
