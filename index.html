@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="th" class="h-full">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>💖 คุณรู้จักฉันดีแค่ไหน?</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Prompt:wght@400;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+    }
+
+    body {
+      font-family: 'Sarabun', sans-serif;
+    }
+
+    .prompt-font {
+      font-family: 'Prompt', sans-serif;
+    }
+
+    @keyframes float-heart {
+      0% {
+        transform: translateY(100%) scale(0);
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(-800%) scale(1.2);
+        opacity: 0;
+      }
+    }
+
+    @keyframes pulse-heart {
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.15);
+      }
+    }
+
+    @keyframes fade-in-up {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: -200% center;
+      }
+
+      100% {
+        background-position: 200% center;
+      }
+    }
+
+    .animate-fade-in-up {
+      animation: fade-in-up 0.6s ease-out forwards;
+    }
+
+    .animate-pulse-heart {
+      animation: pulse-heart 1.5s ease-in-out infinite;
+    }
+
+    .floating-heart {
+      position: fixed;
+      bottom: -50px;
+      animation: float-heart 4s ease-in forwards;
+      pointer-events: none;
+      z-index: 50;
+    }
+
+    .btn-shimmer {
+      background-size: 200% auto;
+      background-image: linear-gradient(90deg, #f472b6, #fb7185, #f472b6);
+      animation: shimmer 3s linear infinite;
+    }
+
+    .page-transition {
+      animation: fade-in-up 0.5s ease-out;
+    }
+
+    .progress-fill {
+      transition: width 0.4s ease;
+    }
+
+    .quiz-input {
+      border: 2px solid #fbb6ce;
+      border-radius: 12px;
+      padding: 12px 16px;
+      width: 100%;
+      font-size: 16px;
+      transition: all 0.3s;
+      background: rgba(255, 255, 255, 0.9);
+      box-sizing: border-box;
+    }
+
+    .quiz-input:focus {
+      outline: none;
+      border-color: #ec4899;
+      box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.2);
+    }
+
+    .quiz-textarea {
+      border: 2px solid #fbb6ce;
+      border-radius: 12px;
+      padding: 12px 16px;
+      width: 100%;
+      font-size: 16px;
+      min-height: 100px;
+      resize: vertical;
+      transition: all 0.3s;
+      background: rgba(255, 255, 255, 0.9);
+      box-sizing: border-box;
+    }
+
+    .quiz-textarea:focus {
+      outline: none;
+      border-color: #ec4899;
+      box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.2);
+    }
+
+    .error-msg {
+      color: #e11d48;
+      font-size: 13px;
+      margin-top: 4px;
+      display: none;
+    }
+
+    .error-msg.show {
+      display: block;
+    }
+
+    .input-error {
+      border-color: #e11d48 !important;
+    }
+  </style>
+</head>
+
+<body class="h-full overflow-auto"
+  style="background: linear-gradient(135deg, #fff0f3 0%, #ffe4ec 30%, #ffd6e0 60%, #ffccd5 100%);">
+
+  <!-- 
+    ⚙️ วิธีตั้งค่า:
+    1. ไปที่ https://script.google.com → New Project
+    2. วางโค้ด Apps Script (ดูในไฟล์ README หรือในคอมเมนต์ด้านล่าง)
+    3. Deploy เป็น Web App → Anyone → คัดลอก URL
+    4. แทน YOUR_APPS_SCRIPT_WEB_APP_URL ด้านล่างด้วย URL นั้น
+  -->
+
+  <div id="bg-hearts" class="fixed inset-0 pointer-events-none overflow-hidden z-0"></div>
+
+  <div id="app" class="relative z-10 h-full w-full flex items-center justify-center p-4">
+
+    <!-- Welcome Page -->
+    <div id="page-welcome" class="page-transition text-center max-w-md w-full">
+      <div class="animate-pulse-heart text-6xl mb-6">💖</div>
+      <h1 class="prompt-font text-3xl md:text-4xl font-bold text-pink-600 mb-4">รู้จักเรามั้ยยยย?</h1>
+      <p class="text-pink-500 text-lg mb-8 leading-relaxed">ตอบตามที่คิดว่าเป็นคำตอบของฉัน ห้ามถามระหว่างทำแบบทดสอบนะ 😆
+      </p>
+      <button onclick="showConfirm()"
+        class="btn-shimmer text-white font-bold py-4 px-10 rounded-full text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+        พร้อมแล้ว ❤️
+      </button>
+    </div>
+
+    <!-- Confirm Popup -->
+    <div id="page-confirm" class="page-transition text-center max-w-md w-full hidden">
+      <div class="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-pink-100">
+        <div id="confirm-emoji" class="text-5xl mb-4">😳</div>
+        <h2 id="confirm-title" class="prompt-font text-2xl font-bold text-pink-600 mb-3">แน่ใจนะว่าจะเริ่มแล้ว?</h2>
+        <p class="text-pink-400 mb-6">เมื่อเริ่มแล้วต้องตอบให้ครบทุกข้อนะ</p>
+        <button id="confirm-btn" onclick="handleConfirmClick()"
+          class="bg-pink-500 hover:bg-pink-600 text-white font-bold rounded-full py-3 px-8 text-lg shadow-lg transform hover:scale-105 transition-all duration-300">
+          แน่ใจ 💕
+        </button>
+      </div>
+    </div>
+
+    <!-- Quiz Page -->
+    <div id="page-quiz" class="page-transition max-w-lg w-full hidden">
+      <div class="bg-white/80 backdrop-blur-sm rounded-3xl p-6 md:p-8 shadow-xl border border-pink-100">
+        <div class="mb-6">
+          <div class="flex justify-between items-center mb-2">
+            <span id="quiz-counter" class="text-pink-500 font-semibold text-sm">1/12</span>
+            <span class="text-pink-400 text-sm">💖</span>
+          </div>
+          <div class="w-full bg-pink-100 rounded-full h-3 overflow-hidden">
+            <div id="progress-bar" class="progress-fill bg-gradient-to-r from-pink-400 to-rose-400 h-full rounded-full"
+              style="width: 8.33%"></div>
+          </div>
+        </div>
+
+        <div id="question-container">
+          <h3 id="question-text" class="prompt-font text-xl font-semibold text-pink-700 mb-4"></h3>
+          <div id="input-container"></div>
+          <div id="error-text" class="error-msg">⚠️ กรุณาตอบคำถามก่อนไปข้อถัดไปนะ</div>
+        </div>
+
+        <div class="flex justify-between mt-6">
+          <button id="btn-prev" onclick="prevQuestion()"
+            class="bg-pink-100 hover:bg-pink-200 text-pink-600 font-semibold py-2 px-5 rounded-full transition-all hidden">
+            ← ย้อนกลับ
+          </button>
+          <button id="btn-next" onclick="nextQuestion()"
+            class="ml-auto bg-pink-500 hover:bg-pink-600 text-white font-semibold py-2 px-6 rounded-full transition-all transform hover:scale-105">
+            ถัดไป →
+          </button>
+          <button id="btn-submit" onclick="submitQuiz()"
+            class="ml-auto bg-rose-500 hover:bg-rose-600 text-white font-bold py-3 px-8 rounded-full transition-all transform hover:scale-105 hidden">
+            ส่งคำตอบ 💖
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Thank You Page -->
+    <div id="page-thankyou" class="page-transition text-center max-w-md w-full hidden">
+      <div class="animate-fade-in-up">
+        <div class="animate-pulse-heart text-7xl mb-6">💖</div>
+        <h2 class="prompt-font text-3xl font-bold text-pink-600 mb-4">💖 ส่งคำตอบเรียบร้อยแล้ว 💖</h2>
+        <p class="text-pink-500 text-lg mb-2">เรากำลังดูคำตอบของเธออยู่นะ ❤️</p>
+        <p class="text-pink-400 mb-8">ขอบคุณที่ตั้งใจตอบทุกข้อ 😊</p>
+        <button onclick="resetQuiz()"
+          class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-all">
+          ส่งอีกครั้ง 💕
+        </button>
+      </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay"
+      class="fixed inset-0 bg-pink-50/80 backdrop-blur-sm flex items-center justify-center z-50 hidden">
+      <div class="text-center">
+        <div class="animate-pulse-heart text-5xl mb-4">💖</div>
+        <p class="text-pink-500 font-semibold">กำลังส่งคำตอบ...</p>
+      </div>
+    </div>
+
+    <!-- Error Toast -->
+    <div id="error-toast"
+      class="fixed top-4 right-4 bg-red-50 border border-red-200 text-red-600 px-5 py-3 rounded-xl shadow-lg z-50 hidden transition-all">
+      <p>❌ ส่งไม่สำเร็จ กรุณาลองอีกครั้ง</p>
+    </div>
+
+  </div>
+
+  <script>
+    // ============================================================
+    // 🔧 ตั้งค่า URL ของ Google Apps Script Web App ตรงนี้
+    // ============================================================
+    const APPS_SCRIPT_URL = "YOUR_APPS_SCRIPT_WEB_APP_URL";
+    // ============================================================
+
+    const questions = [
+      { id: 'birthday', text: '1. วันเกิดของเราคือวันไหน? 🎂', type: 'input', placeholder: 'เช่น 14 กุมภาพันธ์' },
+      { id: 'food', text: '2. อาหารที่เราชอบกินมากที่สุดคืออะไร? 🍜', type: 'input', placeholder: 'พิมพ์คำตอบ...' },
+      { id: 'color', text: '3. สีโปรดของเราคือสีอะไร? 🎨', type: 'input', placeholder: 'พิมพ์คำตอบ...' },
+      { id: 'hobby', text: '4. เราชอบทำอะไรเวลาว่างมากที่สุด? 🎮', type: 'input', placeholder: 'พิมพ์คำตอบ...' },
+      { id: 'animal', text: '5. สัตว์ที่เราชอบที่สุดคืออะไร? 🐾', type: 'input', placeholder: 'พิมพ์คำตอบ...' },
+      { id: 'drink', text: '6. เครื่องดื่มที่เราสั่งบ่อยที่สุดคืออะไร? ☕', type: 'input', placeholder: 'พิมพ์คำตอบ...' },
+      { id: 'fear', text: '7. สิ่งที่ฉันกลัวหรือไม่ชอบมากที่สุดคืออะไร? 😱', type: 'input', placeholder: 'พิมพ์คำตอบ...' },
+      { id: 'partner_name', text: '8. แฟนเราชื่ออะไร? 💑', type: 'input', placeholder: 'พิมพ์คำตอบ...' },
+      { id: 'nickname', text: '9. เราเรียกเธอด้วยคำว่าอะไรบ่อยที่สุด? 🥰', type: 'input', placeholder: 'พิมพ์คำตอบ...' },
+      { id: 'happiness', text: '10. สิ่งหนึ่งที่ทำให้เรามีความสุขมากที่สุดคืออะไร? ✨', type: 'input', placeholder: 'พิมพ์คำตอบ...' },
+      { id: 'three_words', text: '⭐ โบนัส: ถ้าต้องอธิบายตัวเราด้วย 3 คำ เธอจะเลือกคำว่าอะไร?', type: 'textarea', placeholder: 'เช่น น่ารัก ขี้หึง ใจดี' },
+      { id: 'love_level', text: '❤️ โบนัส: เธอคิดว่าเรารักเธอมากแค่ไหน?', type: 'textarea', placeholder: 'บอกมาเลย...' }
+    ];
+
+    let currentQ = 0;
+    let answers = {};
+
+    // ---- Page navigation ----
+    function showPage(id) {
+      document.querySelectorAll('[id^="page-"]').forEach(p => p.classList.add('hidden'));
+      document.getElementById(id).classList.remove('hidden');
+    }
+
+    // ---- Confirm sequence ----
+    let confirmClickCount = 0;
+    const confirmSequence = [
+      { emoji: '😳', text: 'แน่ใจนะว่าจะเริ่มแล้ว?', size: 'py-3 px-8 text-lg' },
+      { emoji: '🤔', text: 'จริงจริงเหรอ? 🤨', size: 'py-4 px-10 text-xl' },
+      { emoji: '😏', text: 'เธอแน่ใจตัวจริงใช่มั้ย? 😏', size: 'py-5 px-12 text-2xl' },
+      { emoji: '😂', text: 'ตกลงค่ะ! ถ้าเธอแน่ใจแบบนี้แล้ว เริ่มเลยยย! 😂', size: 'py-6 px-14 text-3xl' }
+    ];
+
+    function showConfirm() {
+      confirmClickCount = 0;
+      updateConfirmPopup();
+      showPage('page-confirm');
+    }
+
+    function updateConfirmPopup() {
+      const step = confirmSequence[confirmClickCount];
+      document.getElementById('confirm-emoji').textContent = step.emoji;
+      document.getElementById('confirm-title').textContent = step.text;
+      const btn = document.getElementById('confirm-btn');
+      btn.className = `bg-pink-500 hover:bg-pink-600 text-white font-bold rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 ${step.size}`;
+      btn.textContent = confirmClickCount < 3 ? 'แน่ใจ 💕' : 'เริ่มเลย! 🚀';
+    }
+
+    function handleConfirmClick() {
+      if (confirmClickCount < 3) {
+        confirmClickCount++;
+        updateConfirmPopup();
+      } else {
+        startQuiz();
+      }
+    }
+
+    // ---- Quiz logic ----
+    function startQuiz() {
+      currentQ = 0;
+      answers = {};
+      showPage('page-quiz');
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      const q = questions[currentQ];
+      document.getElementById('question-text').textContent = q.text;
+      document.getElementById('quiz-counter').textContent = `${currentQ + 1}/${questions.length}`;
+      document.getElementById('progress-bar').style.width = `${((currentQ + 1) / questions.length) * 100}%`;
+
+      const container = document.getElementById('input-container');
+      const val = answers[q.id] || '';
+      if (q.type === 'textarea') {
+        container.innerHTML = `<textarea class="quiz-textarea" id="q-input" placeholder="${q.placeholder}">${val}</textarea>`;
+      } else {
+        container.innerHTML = `<input type="text" class="quiz-input" id="q-input" placeholder="${q.placeholder}" value="${val}">`;
+      }
+
+      document.getElementById('error-text').classList.remove('show');
+      document.getElementById('q-input').classList.remove('input-error');
+
+      document.getElementById('btn-prev').classList.toggle('hidden', currentQ === 0);
+      document.getElementById('btn-next').classList.toggle('hidden', currentQ === questions.length - 1);
+      document.getElementById('btn-submit').classList.toggle('hidden', currentQ !== questions.length - 1);
+
+      // Enter key support
+      document.getElementById('q-input').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && q.type !== 'textarea') nextQuestion();
+      });
+    }
+
+    function saveCurrentAnswer() {
+      const input = document.getElementById('q-input');
+      if (input) answers[questions[currentQ].id] = input.value.trim();
+    }
+
+    function validateCurrent() {
+      const input = document.getElementById('q-input');
+      if (!input || !input.value.trim()) {
+        if (input) input.classList.add('input-error');
+        document.getElementById('error-text').classList.add('show');
+        return false;
+      }
+      return true;
+    }
+
+    function nextQuestion() {
+      if (!validateCurrent()) return;
+      saveCurrentAnswer();
+      currentQ++;
+      renderQuestion();
+    }
+
+    function prevQuestion() {
+      saveCurrentAnswer();
+      currentQ--;
+      renderQuestion();
+    }
+
+    // ---- Submit to Google Sheets via Apps Script ----
+    async function submitQuiz() {
+      if (!validateCurrent()) return;
+      saveCurrentAnswer();
+
+      // Validate all answered
+      for (const q of questions) {
+        if (!answers[q.id]) {
+          showErrorToast('กรุณาตอบทุกข้อนะ');
+          return;
+        }
+      }
+
+      if (APPS_SCRIPT_URL === "https://script.google.com/macros/s/AKfycbzTH7uhH5GerUN2k6ve0_yfsdsoRVuRW5fQtEfGcdaFIBw377HzPHERCDnYhR-18rCEqg/exec") {
+        alert('⚙️ กรุณาตั้งค่า APPS_SCRIPT_URL ในไฟล์ HTML ก่อนนะ');
+        return;
+      }
+
+      document.getElementById('loading-overlay').classList.remove('hidden');
+
+      const record = {
+        timestamp: new Date().toLocaleString('th-TH', { timeZone: 'Asia/Bangkok' }),
+        ...answers
+      };
+
+      try {
+        // Apps Script ต้องการ no-cors หรือ redirect → ใช้ fetch แบบ no-cors
+        // แต่จะไม่ได้รับ response body กลับมา ดังนั้นถือว่าส่งสำเร็จหาก fetch ไม่ error
+        await fetch(APPS_SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain' },
+          body: JSON.stringify(record)
+        });
+
+        document.getElementById('loading-overlay').classList.add('hidden');
+        showPage('page-thankyou');
+        spawnCelebrationHearts();
+      } catch (err) {
+        document.getElementById('loading-overlay').classList.add('hidden');
+        showErrorToast('ส่งไม่สำเร็จ กรุณาลองอีกครั้ง');
+        console.error(err);
+      }
+    }
+
+    function showErrorToast(msg) {
+      const toast = document.getElementById('error-toast');
+      toast.querySelector('p').textContent = '❌ ' + (msg || 'เกิดข้อผิดพลาด');
+      toast.classList.remove('hidden');
+      setTimeout(() => toast.classList.add('hidden'), 3000);
+    }
+
+    function resetQuiz() {
+      showPage('page-welcome');
+    }
+
+    // ---- Floating hearts ----
+    function spawnHeart() {
+      const heart = document.createElement('div');
+      heart.className = 'floating-heart';
+      heart.textContent = ['💖', '💕', '❤️', '💗', '💓'][Math.floor(Math.random() * 5)];
+      heart.style.left = Math.random() * 100 + '%';
+      heart.style.fontSize = (16 + Math.random() * 20) + 'px';
+      heart.style.animationDuration = (3 + Math.random() * 3) + 's';
+      document.getElementById('bg-hearts').appendChild(heart);
+      setTimeout(() => heart.remove(), 6000);
+    }
+
+    function spawnCelebrationHearts() {
+      for (let i = 0; i < 20; i++) setTimeout(() => spawnHeart(), i * 200);
+    }
+
+    setInterval(spawnHeart, 2500);
+  </script>
+</body>
+
+</html>
