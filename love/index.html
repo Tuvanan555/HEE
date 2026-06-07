@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NannKub 💙🩷</title>
+    <style>
+        .menu-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to right, transparent, var(--glass-highlight), transparent);
+            transform: skewX(-20deg);
+            transition: 0.5s;
+        }
+
+        .menu-card:hover::before {
+            left: 150%;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-12px) scale(1.03) !important;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25), 0 0 20px var(--accent-glow) !important;
+            border-color: var(--accent-color);
+        }
+
+        .menu-icon-wrapper {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 76px;
+            height: 76px;
+            border-radius: 50%;
+            background: var(--card-gradient);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            margin-bottom: 20px;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .menu-card:hover .menu-icon-wrapper {
+            transform: scale(1.15) rotate(8deg);
+            background: var(--nav-active-bg);
+            border-color: var(--accent-color);
+            box-shadow: 0 12px 28px var(--accent-glow);
+        }
+
+        .menu-card i {
+            margin-bottom: 0 !important;
+            font-size: 2.5rem !important;
+            color: var(--accent-color);
+            filter: drop-shadow(0 4px 8px var(--accent-glow));
+            transition: all 0.3s ease;
+        }
+
+        .menu-card:hover i {
+            color: #fff;
+            filter: drop-shadow(0 4px 12px rgba(255,255,255,0.4));
+        }
+
+        .milestone-card {
+            background: var(--card-gradient);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .milestone-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; width: 100%; height: 3px;
+            background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .milestone-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: var(--accent-color);
+            box-shadow: 0 15px 35px var(--accent-glow);
+        }
+
+        .milestone-card:hover::after {
+            opacity: 1;
+        }
+
+        .home-title {
+            font-size: 3.2rem;
+            font-weight: 700;
+            text-align: center;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            text-shadow: 0 4px 25px rgba(0, 0, 0, 0.15);
+            background: linear-gradient(135deg, var(--text-primary), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.02em;
+        }
+    </style>
+
+    <!-- PWA / Mobile Web App Meta -->
+    <meta name="theme-color" content="#0F172A">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="manifest" href="manifest.json" onerror="this.onerror=null;this.href='';">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/themes.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/gallery.css">
+    <link rel="stylesheet" href="css/diary.css">
+    <link rel="stylesheet" href="css/editor.css">
+    <link rel="stylesheet" href="css/chat.css">
+
+    <!-- External Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api/dist/face-api.js"></script>
+</head>
+
+<body class="theme-midnight-blue">
+    <!-- Particle Canvas Background -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Login Screen -->
+    <div id="login-screen" class="view active">
+        <div class="login-card glass-panel">
+            <div class="login-logo">💙</div>
+            <h1 class="animate-float">NannKub</h1>
+            <p class="subtitle">โน่ & นัน</p>
+            <div class="login-milestones">
+                <span class="milestone-badge">💬 ทักมา 27 ม.ค. 69</span>
+                <span class="milestone-badge">💙 คุยกัน 6 ก.พ. 69</span>
+                <span class="milestone-badge">💕 คบกัน 29 พ.ค. 69</span>
+            </div>
+            <div class="user-selection">
+                <button class="btn-user" data-user="โน่">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Noh" alt="โน่">
+                    <span>โน่ 💙</span>
+                </button>
+                <button class="btn-user" data-user="นัน">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Nan" alt="นัน">
+                    <span>นัน 🩷</span>
+                </button>
+            </div>
+
+            <div id="password-container" class="hidden">
+                <h3 id="selected-user-name"></h3>
+                <div class="input-group">
+                    <input type="password" id="password-input" placeholder="ใส่รหัสผ่าน...">
+                    <button id="login-btn" class="btn-primary">เข้าสู่ระบบ</button>
+                </div>
+                <p id="login-error" class="error-msg hidden">รหัสผ่านไม่ถูกต้อง</p>
+                <button id="back-to-users" class="btn-text">กลับไปเลือกใหม่</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App Layout -->
+    <div id="app-layout" class="view hidden">
+
+        <!-- Mobile Header (Simplified) -->
+        <header class="mobile-header">
+            <h2>NannKub</h2>
+            <button id="theme-toggle-mobile" class="theme-btn"><i class="fas fa-adjust"></i></button>
+        </header>
+
+        <!-- Sidebar Navigation -->
+        <nav id="sidebar" class="glass-panel">
+            <div class="sidebar-header">
+                <h2>NannKub</h2>
+            </div>
+
+            <div class="user-profile">
+                <img id="current-user-avatar" src="" alt="Profile">
+                <div>
+                    <h3 id="current-user-name">สวัสดี</h3>
+                    <p class="relationship-counter" id="relationship-counter">นับถอยหลัง...</p>
+                </div>
+            </div>
+
+            <ul class="nav-links">
+                <li><a href="#" data-target="dashboard" class="active"><i class="fas fa-home"></i>
+                        <span>หน้าหลัก</span></a></li>
+                <li><a href="#" data-target="gallery"><i class="fas fa-images"></i> <span>แกลเลอรี่</span></a></li>
+                <li><a href="#" data-target="chat"><i class="fas fa-comments"></i> <span>แชท</span></a></li>
+                <li><a href="#" data-target="diary"><i class="fas fa-book-open"></i> <span>ไดอารี่</span></a></li>
+                <li><a href="#" data-target="timeline"><i class="fas fa-stream"></i> <span>ไทม์ไลน์</span></a></li>
+                <li><a href="#" data-target="settings"><i class="fas fa-cog"></i> <span>ตั้งค่า</span></a></li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <button id="theme-toggle-desktop" class="btn-secondary w-100">
+                    <i class="fas fa-palette"></i> เปลี่ยนธีม
+                </button>
+                <button id="logout-btn" class="btn-text w-100">
+                    <i class="fas fa-sign-out-alt"></i> ออกจากระบบ
+                </button>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main id="main-content">
+            <!-- Loading Overlay -->
+            <div id="loading-overlay" class="hidden glass-panel">
+                <div class="spinner"></div>
+                <p>กำลังโหลด...</p>
+            </div>
+
+            <!-- Views will be dynamically shown/hidden here -->
+            <section id="view-dashboard" class="content-section active">
+                <header class="section-header" style="justify-content: center; margin-bottom: 40px; margin-top: 20px;">
+                    <h1 class="home-title">NannKub 🤍</h1>
+
+                </header>
+
+                <!-- Milestones / Timeline Summary -->
+                <div class="milestone-cards"
+                    style="display: flex; gap: 15px; margin-bottom: 40px; overflow-x: auto; padding-bottom: 15px; padding-top: 5px;">
+                    <div class="milestone-card"
+                        style="min-width: 140px; flex: 1; padding: 24px 15px; text-align: center; border-radius: 28px;">
+                        <div style="background: var(--nav-active-bg); width: 60px; height: 60px; margin: 0 auto 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 2px 10px rgba(255,255,255,0.05);">
+                            <i class="fas fa-comment-dots"
+                                style="font-size: 1.6rem; color: var(--accent-color); filter: drop-shadow(0 4px 12px var(--accent-glow));"></i>
+                        </div>
+                        <h4 style="font-size: 1.05rem; margin-bottom: 6px; color: var(--text-primary); font-weight: 600;">ทักมา</h4>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 500;">27 ม.ค. 69</p>
+                    </div>
+                    <div class="milestone-card"
+                        style="min-width: 140px; flex: 1; padding: 24px 15px; text-align: center; border-radius: 28px;">
+                        <div style="background: var(--nav-active-bg); width: 60px; height: 60px; margin: 0 auto 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 2px 10px rgba(255,255,255,0.05);">
+                            <i class="fas fa-user-friends"
+                                style="font-size: 1.6rem; color: var(--accent-color); filter: drop-shadow(0 4px 12px var(--accent-glow));"></i>
+                        </div>
+                        <h4 style="font-size: 1.05rem; margin-bottom: 6px; color: var(--text-primary); font-weight: 600;">คนคุย</h4>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 500;">6 ก.พ. 69</p>
+                    </div>
+                    <div class="milestone-card"
+                        style="min-width: 140px; flex: 1; padding: 24px 15px; text-align: center; border-radius: 28px;">
+                        <div style="background: var(--heart-glow); width: 60px; height: 60px; margin: 0 auto 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 2px 10px rgba(255,255,255,0.05);">
+                            <i class="fas fa-heart"
+                                style="font-size: 1.6rem; color: var(--heart-color); filter: drop-shadow(0 4px 12px var(--heart-glow));"></i>
+                        </div>
+                        <h4 style="font-size: 1.05rem; margin-bottom: 6px; color: var(--text-primary); font-weight: 600;">คบกัน</h4>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 500;">29 พ.ค. 69</p>
+                    </div>
+                </div>
+
+                <!-- Main Menu Grid -->
+                <div class="home-menu-grid"
+                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 20px; padding: 0 5px;">
+                    <div class="menu-card animate-up" onclick="app.navigate('gallery')"
+                        style="cursor: pointer; padding: 35px 20px; text-align: center; border-radius: 28px;">
+                        <div class="menu-icon-wrapper">
+                            <i class="fas fa-images"></i>
+                        </div>
+                        <h3 style="font-size: 1.25rem; color: var(--text-primary); margin-bottom: 5px;">แกลเลอรี่</h3>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary);">คลังรูปภาพโพลาลอยด์</p>
+                    </div>
+
+                    <div class="menu-card animate-up" onclick="app.navigate('chat')"
+                        style="cursor: pointer; padding: 35px 20px; text-align: center; border-radius: 28px; animation-delay: 0.1s;">
+                        <div class="menu-icon-wrapper">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <h3 style="font-size: 1.25rem; color: var(--text-primary); margin-bottom: 5px;">แชท</h3>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary);">ข้อความระหว่างเรา</p>
+                    </div>
+
+                    <div class="menu-card animate-up" onclick="app.navigate('diary')"
+                        style="cursor: pointer; padding: 35px 20px; text-align: center; border-radius: 28px; animation-delay: 0.2s;">
+                        <div class="menu-icon-wrapper">
+                            <i class="fas fa-book-heart"></i>
+                        </div>
+                        <h3 style="font-size: 1.25rem; color: var(--text-primary); margin-bottom: 5px;">ไดอารี่</h3>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary);">บันทึกความทรงจำ</p>
+                    </div>
+
+                    <div class="menu-card animate-up" onclick="app.navigate('settings')"
+                        style="cursor: pointer; padding: 35px 20px; text-align: center; border-radius: 28px; animation-delay: 0.3s;">
+                        <div class="menu-icon-wrapper">
+                            <i class="fas fa-palette"></i>
+                        </div>
+                        <h3 style="font-size: 1.25rem; color: var(--text-primary); margin-bottom: 5px;">เปลี่ยนธีม</h3>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary);">ปรับแต่งสีสันของแอป</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Gallery - Photo Feed -->
+            <section id="view-gallery" class="content-section hidden">
+                <div class="gallery-feed-header">
+                    <h1>แกลเลอรี่</h1>
+                </div>
+                <div class="gallery-filter-chips">
+                    <button class="chip active" data-folder="all">ทั้งหมด</button>
+                    <button class="chip" data-folder="โน่">💙 โน่</button>
+                    <button class="chip" data-folder="นัน">🩷 นัน</button>
+                    <button class="chip" data-folder="คู่">💕 คู่</button>
+                    <button class="chip" data-folder="อื่นๆ">📁 อื่นๆ</button>
+                </div>
+                <div class="gallery-feed" id="gallery-container"></div>
+
+                <!-- FAB Upload Button -->
+                <button class="fab-upload" id="btn-upload-photo">
+                    <i class="fas fa-plus"></i>
+                </button>
+
+                <!-- Upload Modal -->
+                <div id="upload-modal" class="modal hidden">
+                    <div class="modal-content glass-panel">
+                        <span class="close-modal">&times;</span>
+                        <h2>อัปโหลดรูปภาพ</h2>
+                        <div class="upload-area" id="drop-zone">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>เลือกรูปภาพที่ต้องการอัปโหลด</p>
+                            <input type="file" id="file-input" multiple accept="image/*" class="hidden">
+                        </div>
+                        <div id="upload-preview" class="upload-preview-grid"></div>
+                        <div class="upload-actions">
+                            <button id="btn-process-upload" class="btn-primary" disabled>อัปโหลด</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Editor Modal (FullScreen) -->
+                <div id="editor-modal" class="modal hidden">
+                    <div class="modal-content glass-panel"
+                        style="width: 100%; height: 100%; max-width: none; border-radius: 0; padding: 20px; display: flex; flex-direction: column;">
+                        <div class="editor-modal-header"
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <h2><i class="fas fa-paint-brush"></i> แต่งรูปภาพ</h2>
+                            <span class="close-editor-modal" style="font-size: 2rem; cursor: pointer;">&times;</span>
+                        </div>
+                        <div class="editor-layout"
+                            style="flex: 1; display: flex; flex-direction: column; overflow: hidden;">
+                            <div class="editor-canvas-container glass-panel"
+                                style="flex: 1; min-height: 50vh; display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 15px;">
+                                <canvas id="photo-editor-canvas"
+                                    style="max-width: 100%; max-height: 100%; object-fit: contain;"></canvas>
+                                <div class="editor-no-image" id="editor-placeholder">
+                                    <i class="fas fa-spinner fa-spin"></i>
+                                    <p>กำลังโหลดรูปภาพ...</p>
+                                </div>
+                            </div>
+                            <div class="editor-controls glass-panel" style="padding: 15px; border-radius: 20px;">
+                                <div class="editor-tabs"
+                                    style="display: flex; gap: 10px; margin-bottom: 15px; overflow-x: auto; padding-bottom: 5px;">
+                                    <button class="editor-tab active" data-tool="filters"
+                                        style="white-space: nowrap;"><i class="fas fa-magic"></i> ฟิลเตอร์</button>
+                                    <button class="editor-tab" data-tool="frames" style="white-space: nowrap;"><i
+                                            class="fas fa-border-style"></i> กรอบรูป</button>
+                                    <button class="editor-tab" data-tool="adjust" style="white-space: nowrap;"><i
+                                            class="fas fa-sliders-h"></i> ปรับแต่ง</button>
+                                </div>
+                                <div class="editor-tool-content" id="editor-tools-container"
+                                    style="min-height: 80px; margin-bottom: 15px;">
+                                    <!-- Tool options populated by editor.js -->
+                                </div>
+                                <div class="editor-actions"
+                                    style="display: flex; gap: 15px; justify-content: space-between;">
+                                    <button class="btn-secondary" id="btn-editor-reset" style="flex: 1;"><i
+                                            class="fas fa-undo"></i> รีเซ็ต</button>
+                                    <button class="btn-primary" id="btn-editor-save" style="flex: 1;"><i
+                                            class="fas fa-save"></i> บันทึกภาพ</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="view-diary" class="content-section hidden">
+                <h1>ไดอารี่</h1>
+                <div id="diary-container"></div>
+            </section>
+
+            <!-- Chat Section -->
+            <section id="view-chat" class="content-section hidden">
+                <div id="chat-container"></div>
+            </section>
+
+            <section id="view-timeline" class="content-section hidden">
+                <h1>Timeline</h1>
+                <div id="timeline-container"></div>
+            </section>
+            <section id="view-stats" class="content-section hidden">
+                <h1>Statistics</h1>
+                <div class="stats-grid">
+                    <div class="chart-container glass-panel">
+                        <canvas id="mood-chart"></canvas>
+                    </div>
+                    <div class="chart-container glass-panel">
+                        <canvas id="activity-chart"></canvas>
+                    </div>
+                </div>
+            </section>
+            <section id="view-settings" class="content-section hidden">
+                <h1>Settings</h1>
+                <div class="settings-container glass-panel"
+                    style="padding: 20px; display: flex; flex-direction: column; gap: 15px;">
+                    <div class="profile-selection"
+                        style="margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--glass-border);">
+                        <h3 style="margin-bottom: 15px; font-size: 1.1rem;"><i class="fas fa-user-circle"></i>
+                            รูปโปรไฟล์ของฉัน</h3>
+                        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+                            <img id="current-profile-img" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Default"
+                                style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent-color);">
+                            <div style="flex: 1;">
+                                <p id="current-profile-name" style="font-weight: 600; margin-bottom: 5px;">กำลังโหลด...
+                                </p>
+                                <button class="btn-text" id="btn-change-profile"
+                                    style="font-size: 0.85rem; padding: 0;">เปลี่ยนรูปใหม่</button>
+                            </div>
+                        </div>
+                        <div id="profile-upload-container" class="hidden" style="margin-top: 10px;">
+                            <input type="text" id="profile-url-input" placeholder="ใส่ลิงก์รูปภาพ (URL)"
+                                style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.1); color: var(--text-primary); margin-bottom: 10px;">
+                            <button id="btn-save-profile" class="btn-primary w-100">บันทึกรูปโปรไฟล์</button>
+                        </div>
+                    </div>
+
+                    <div class="theme-selection" style="margin-bottom: 10px;">
+                        <h3 style="margin-bottom: 15px; font-size: 1.1rem;"><i class="fas fa-palette"></i> เลือกธีมสี
+                        </h3>
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            <button class="btn-secondary w-100 theme-btn-select" data-theme="theme-midnight-blue">🌌
+                                ฟ้ามิดไนท์ (Midnight Blue)</button>
+                            <button class="btn-secondary w-100 theme-btn-select" data-theme="theme-pink-love">🩷
+                                ชมพูความรัก (Pink Love)</button>
+                            <button class="btn-secondary w-100 theme-btn-select" data-theme="theme-cream">🍦
+                                สีครีมมินิมอล (Cream Vanilla)</button>
+                            <button class="btn-secondary w-100 theme-btn-select" data-theme="theme-light-blue">☁️
+                                สีฟ้าสว่าง (Sky Blue)</button>
+                            <button class="btn-secondary w-100 theme-btn-select" data-theme="theme-monochrome">🖤
+                                ขาวดำคลีนๆ (Monochrome)</button>
+                        </div>
+                    </div>
+
+                    <button id="logout-btn-settings" class="btn-secondary w-100"><i class="fas fa-sign-out-alt"></i>
+                        ออกจากระบบ</button>
+
+                    <div id="admin-panel" class="hidden"
+                        style="margin-top: 20px; border-top: 1px solid var(--glass-border); padding-top: 20px;">
+                        <h3 style="color: var(--accent-color); margin-bottom: 10px;"><i class="fas fa-shield-alt"></i>
+                            พื้นที่ผู้ดูแลระบบ (โตโน่)</h3>
+                        <p style="font-size: 0.9rem; margin-bottom: 15px; color: var(--text-secondary);">
+                            การจัดการข้อมูลระบบ (Frontend Cache)</p>
+                        <button id="btn-clear-cache" class="btn-primary w-100"
+                            style="background: var(--danger-color);"><i class="fas fa-trash"></i>
+                            ล้างข้อมูลแคชและกลับสู่หน้าแรก</button>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Bottom Navigation for Mobile -->
+        <nav class="bottom-nav">
+            <a href="#" data-target="dashboard" class="active"><i class="fas fa-home"></i><span>หน้าหลัก</span></a>
+            <a href="#" data-target="gallery"><i class="fas fa-images"></i><span>แกลเลอรี่</span></a>
+            <a href="#" data-target="chat"><i class="fas fa-comments"></i><span>แชท</span></a>
+            <a href="#" data-target="diary"><i class="fas fa-book-open"></i><span>ไดอารี่</span></a>
+            <a href="#" data-target="settings"><i class="fas fa-bars"></i><span>เพิ่มเติม</span></a>
+        </nav>
+    </div>
+
+    <!-- Application Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/faceDetection.js"></script>
+    <script src="js/gallery.js"></script>
+    <script src="js/diary.js"></script>
+    <script src="js/editor.js"></script>
+    <script src="js/timeline.js"></script>
+    <script src="js/analytics.js"></script>
+    <script src="js/chat.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>

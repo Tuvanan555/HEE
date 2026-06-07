@@ -1,0 +1,122 @@
+/* css/themes.css */
+:root {
+    /* Default - Midnight Blue */
+    --bg-gradient: linear-gradient(135deg, #0a0f1e 0%, #131b2e 50%, #0d1525 100%);
+    --bg-color: #0a0f1e;
+    --secondary-color: #131b2e;
+    --accent-color: #38bdf8;
+    --accent-hover: #0ea5e9;
+    --accent-glow: rgba(56, 189, 248, 0.25);
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --glass-bg: rgba(15, 23, 42, 0.6);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    --glass-highlight: rgba(255, 255, 255, 0.04);
+    --card-gradient: linear-gradient(135deg, rgba(56, 189, 248, 0.08), rgba(139, 92, 246, 0.06));
+    --danger-color: #f43f5e;
+    --success-color: #10b981;
+    --heart-color: #f43f5e;
+    --heart-glow: rgba(244, 63, 94, 0.3);
+    --nav-active-bg: rgba(56, 189, 248, 0.15);
+    --input-bg: rgba(255, 255, 255, 0.04);
+    --input-border: rgba(255, 255, 255, 0.1);
+    --scrollbar-thumb: rgba(56, 189, 248, 0.3);
+    --scrollbar-track: rgba(0, 0, 0, 0.2);
+}
+
+body.theme-pink-love {
+    --bg-gradient: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 50%, #fbcfe8 100%);
+    --bg-color: #fdf2f8;
+    --secondary-color: #fce7f3;
+    --accent-color: #ec4899;
+    --accent-hover: #db2777;
+    --accent-glow: rgba(236, 72, 153, 0.2);
+    --text-primary: #831843;
+    --text-secondary: #9d174d;
+    --glass-bg: rgba(255, 255, 255, 0.65);
+    --glass-border: rgba(236, 72, 153, 0.15);
+    --glass-shadow: 0 8px 32px rgba(236, 72, 153, 0.08);
+    --glass-highlight: rgba(236, 72, 153, 0.03);
+    --card-gradient: linear-gradient(135deg, rgba(236, 72, 153, 0.06), rgba(244, 114, 182, 0.04));
+    --heart-color: #e11d48;
+    --heart-glow: rgba(225, 29, 72, 0.25);
+    --nav-active-bg: rgba(236, 72, 153, 0.12);
+    --input-bg: rgba(255, 255, 255, 0.5);
+    --input-border: rgba(236, 72, 153, 0.2);
+    --scrollbar-thumb: rgba(236, 72, 153, 0.3);
+    --scrollbar-track: rgba(236, 72, 153, 0.05);
+}
+
+body.theme-midnight-blue {
+    /* Uses :root defaults */
+}
+
+body.theme-cream {
+    --bg-gradient: linear-gradient(135deg, #fefcf3 0%, #f5ebe0 50%, #edede9 100%);
+    --bg-color: #fefcf3;
+    --secondary-color: #f5ebe0;
+    --accent-color: #b08968;
+    --accent-hover: #9c6644;
+    --accent-glow: rgba(176, 137, 104, 0.2);
+    --text-primary: #3e2723;
+    --text-secondary: #795548;
+    --glass-bg: rgba(255, 255, 255, 0.6);
+    --glass-border: rgba(176, 137, 104, 0.15);
+    --glass-shadow: 0 8px 32px rgba(176, 137, 104, 0.08);
+    --glass-highlight: rgba(176, 137, 104, 0.03);
+    --card-gradient: linear-gradient(135deg, rgba(176, 137, 104, 0.06), rgba(212, 163, 115, 0.04));
+    --heart-color: #c2185b;
+    --heart-glow: rgba(194, 24, 91, 0.25);
+    --nav-active-bg: rgba(176, 137, 104, 0.12);
+    --input-bg: rgba(255, 255, 255, 0.5);
+    --input-border: rgba(176, 137, 104, 0.2);
+    --scrollbar-thumb: rgba(176, 137, 104, 0.3);
+    --scrollbar-track: rgba(176, 137, 104, 0.05);
+}
+
+body.theme-light-blue {
+    --bg-gradient: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #bae6fd 100%);
+    --bg-color: #f0f9ff;
+    --secondary-color: #e0f2fe;
+    --accent-color: #0284c7;
+    --accent-hover: #0369a1;
+    --accent-glow: rgba(2, 132, 199, 0.2);
+    --text-primary: #0c4a6e;
+    --text-secondary: #475569;
+    --glass-bg: rgba(255, 255, 255, 0.65);
+    --glass-border: rgba(2, 132, 199, 0.12);
+    --glass-shadow: 0 8px 32px rgba(2, 132, 199, 0.1);
+    --glass-highlight: rgba(2, 132, 199, 0.03);
+    --card-gradient: linear-gradient(135deg, rgba(2, 132, 199, 0.06), rgba(56, 189, 248, 0.04));
+    --heart-color: #f43f5e;
+    --heart-glow: rgba(244, 63, 94, 0.25);
+    --nav-active-bg: rgba(2, 132, 199, 0.12);
+    --input-bg: rgba(255, 255, 255, 0.5);
+    --input-border: rgba(2, 132, 199, 0.15);
+    --scrollbar-thumb: rgba(2, 132, 199, 0.3);
+    --scrollbar-track: rgba(2, 132, 199, 0.05);
+}
+
+body.theme-monochrome {
+    --bg-gradient: linear-gradient(135deg, #fafafa 0%, #f5f5f5 50%, #e5e5e5 100%);
+    --bg-color: #fafafa;
+    --secondary-color: #f5f5f5;
+    --accent-color: #262626;
+    --accent-hover: #404040;
+    --accent-glow: rgba(38, 38, 38, 0.15);
+    --text-primary: #171717;
+    --text-secondary: #737373;
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(0, 0, 0, 0.08);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+    --glass-highlight: rgba(0, 0, 0, 0.02);
+    --card-gradient: linear-gradient(135deg, rgba(0, 0, 0, 0.03), rgba(0, 0, 0, 0.01));
+    --heart-color: #e11d48;
+    --heart-glow: rgba(225, 29, 72, 0.25);
+    --nav-active-bg: rgba(38, 38, 38, 0.08);
+    --input-bg: rgba(0, 0, 0, 0.03);
+    --input-border: rgba(0, 0, 0, 0.1);
+    --scrollbar-thumb: rgba(0, 0, 0, 0.2);
+    --scrollbar-track: rgba(0, 0, 0, 0.03);
+}

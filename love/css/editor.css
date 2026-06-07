@@ -1,0 +1,142 @@
+/* css/editor.css */
+.editor-layout {
+    display: flex;
+    gap: 25px;
+    height: calc(100vh - 150px);
+}
+
+@media (max-width: 900px) {
+    .editor-layout {
+        flex-direction: column;
+        height: auto;
+    }
+}
+
+.editor-canvas-container {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: repeating-conic-gradient(rgba(0,0,0,0.1) 0% 25%, transparent 0% 50%) 50% / 20px 20px;
+    position: relative;
+}
+
+#photo-editor-canvas {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+.editor-no-image {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    color: var(--text-secondary);
+}
+
+.editor-no-image i {
+    font-size: 3rem;
+}
+
+.editor-controls {
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+@media (max-width: 900px) {
+    .editor-controls {
+        width: 100%;
+    }
+}
+
+.editor-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--glass-border);
+    padding-bottom: 10px;
+}
+
+.editor-tab {
+    background: transparent;
+    color: var(--text-secondary);
+    border: none;
+    padding: 8px 12px;
+    font-weight: 600;
+}
+
+.editor-tab.active {
+    color: var(--accent-color);
+    border-bottom: 2px solid var(--accent-color);
+}
+
+.editor-tool-content {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+/* Tool specific styles */
+.filter-grid, .frame-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.filter-btn, .frame-btn {
+    background: rgba(0,0,0,0.2);
+    border: 1px solid var(--glass-border);
+    padding: 15px 10px;
+    border-radius: 8px;
+    color: var(--text-primary);
+    text-align: center;
+    transition: all 0.2s;
+}
+
+.filter-btn:hover, .frame-btn:hover, .filter-btn.active, .frame-btn.active {
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+.adjust-group {
+    margin-bottom: 20px;
+}
+
+.adjust-group label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+}
+
+.adjust-slider {
+    width: 100%;
+    appearance: none;
+    height: 6px;
+    background: var(--glass-border);
+    border-radius: 3px;
+    outline: none;
+}
+
+.adjust-slider::-webkit-slider-thumb {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--accent-color);
+    cursor: pointer;
+}
+
+.editor-actions {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--glass-border);
+    display: flex;
+    justify-content: space-between;
+}
